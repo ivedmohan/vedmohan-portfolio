@@ -22,3 +22,7 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+
+/liquid-glass-ai-temp
+/lumina-portfolio-temp

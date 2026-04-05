@@ -1,9 +1,16 @@
-import { useRef, useCallback } from "react";
-import { Globe, ArrowRight, Instagram, Twitter } from "lucide-react";
+import { useRef, useCallback, useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import { Globe, ArrowRight, Instagram, Twitter, Mail, Github, Linkedin } from "lucide-react";
 import AboutSection from "@/components/AboutSection";
-import FeaturedVideoSection from "@/components/FeaturedVideoSection";
+import CapabilitiesSection from "@/components/CapabilitiesSection";
+import StatsSection from "@/components/StatsSection";
+import TechStackSection from "@/components/TechStackSection";
+import FeaturedProjectSection from "@/components/FeaturedProjectSection";
 import PhilosophySection from "@/components/PhilosophySection";
-import ServicesSection from "@/components/ServicesSection";
+import ProjectsSection from "@/components/ProjectsSection";
+import HackathonWinsSection from "@/components/HackathonWinsSection";
+import LoadingScreen from "@/components/LoadingScreen";
+import GlassCursor from "@/components/GlassCursor";
 import { useSmoothScroll } from "@/hooks/useSmoothScroll";
 
 const HERO_VIDEO_URL =
@@ -26,6 +33,7 @@ function animateOpacity(
 
 const Index = () => {
   useSmoothScroll();
+  const [loading, setLoading] = useState(true);
   const videoRef = useRef<HTMLVideoElement>(null);
 
   const onCanPlay = useCallback(() => {
@@ -56,6 +64,8 @@ const Index = () => {
 
   return (
     <div className="bg-background">
+      <GlassCursor />
+      
       {/* HERO */}
       <section className="min-h-screen relative flex flex-col overflow-hidden">
         <video
@@ -72,74 +82,152 @@ const Index = () => {
           onEnded={onEnded}
         />
 
-        {/* Navbar */}
-        <nav className="relative z-20 px-6 py-6">
-          <div className="liquid-glass rounded-full max-w-5xl mx-auto px-6 py-3 flex items-center justify-between">
-            <div className="flex items-center">
-              <Globe size={24} className="text-foreground" />
-              <span className="text-foreground font-semibold text-lg ml-2">Asme</span>
-              <div className="hidden md:flex items-center gap-8 ml-8">
-                {["Features", "Pricing", "About"].map((t) => (
-                  <a key={t} href="#" className="text-foreground/80 hover:text-foreground text-sm font-medium transition-colors">
-                    {t}
-                  </a>
-                ))}
-              </div>
-            </div>
-            <div className="flex items-center gap-4">
-              <a href="#" className="text-foreground text-sm font-medium">Sign Up</a>
-              <button className="liquid-glass rounded-full px-6 py-2 text-foreground text-sm font-medium">
-                Login
-              </button>
-            </div>
+      <AnimatePresence>
+        {loading && <LoadingScreen onComplete={() => setLoading(false)} />}
+      </AnimatePresence>
+
+      {/* Navbar */}
+      <nav className="fixed top-0 left-0 right-0 z-50 flex justify-center pt-6 px-6">
+        <div className="liquid-glass rounded-full px-2 py-2 flex items-center justify-between gap-4 border border-white/5">
+          <div className="flex items-center pl-2">
+            <Globe size={20} className="text-white/60" />
+            <span className="text-white font-medium text-sm ml-2 mr-4 whitespace-nowrap">Ved Mohan</span>
           </div>
-        </nav>
+          
+          <div className="w-px h-4 bg-white/10 hidden sm:block" />
+
+          <div className="hidden md:flex items-center gap-1">
+            {[
+              { name: "About", href: "#about" },
+              { name: "Projects", href: "#projects" },
+              { name: "Wins", href: "#wins" },
+              { name: "Stack", href: "#stack" },
+            ].map((link) => (
+              <a
+                key={link.name}
+                href={link.href}
+                className="text-white/60 hover:text-white hover:bg-white/5 px-4 py-2 rounded-full text-xs font-medium transition-all"
+              >
+                {link.name}
+              </a>
+            ))}
+          </div>
+
+          <div className="w-px h-4 bg-white/10 hidden sm:block" />
+
+          <div className="flex items-center gap-2">
+            <a 
+              href="mailto:vedmohan0@gmail.com"
+              className="liquid-glass rounded-full px-5 py-2 text-white text-xs font-medium hover:bg-white/10 transition-colors border border-white/10"
+            >
+              Hire Me
+            </a>
+          </div>
+        </div>
+      </nav>
 
         {/* Hero Content */}
-        <div className="relative z-10 flex-1 flex flex-col items-center justify-center px-6 py-12 text-center -translate-y-[20%]">
+        <div className="relative z-10 flex-1 flex flex-col items-center justify-center px-6 py-12 text-center">
           <h1
-            className="text-7xl md:text-8xl lg:text-9xl text-foreground tracking-tight whitespace-nowrap"
+            className="text-5xl md:text-8xl lg:text-9xl text-foreground tracking-tight whitespace-normal md:whitespace-nowrap px-4"
             style={{ fontFamily: "'Instrument Serif', serif" }}
           >
-            Know it then <em className="italic">all</em>.
+            Building then <em className="italic">the Future</em>.
           </h1>
 
-          <div className="max-w-xl w-full mt-8">
-            <div className="liquid-glass rounded-full pl-6 pr-2 py-2 flex items-center gap-3">
-              <input
-                type="email"
-                placeholder="Enter your email"
-                className="flex-1 bg-transparent text-foreground placeholder:text-foreground/40 outline-none text-sm"
-              />
-              <button className="bg-foreground rounded-full p-3 text-background flex-shrink-0">
-                <ArrowRight size={20} />
-              </button>
-            </div>
+          <div className="mt-12">
+            <a 
+              href="mailto:vedmohan0@gmail.com"
+              className="liquid-glass rounded-full px-10 py-5 text-white text-lg font-medium hover:bg-white/10 transition-all border border-white/10 inline-flex items-center gap-3 group"
+            >
+              Hire Me 
+              <ArrowRight size={20} className="transition-transform group-hover:translate-x-1" />
+            </a>
           </div>
 
-          <p className="text-foreground text-sm leading-relaxed px-4 mt-6 max-w-md">
-            Stay updated with the latest news and insights. Subscribe to our newsletter today and never miss out on exciting updates.
+          <p className="text-foreground text-sm leading-relaxed px-4 mt-6 max-w-md font-light">
+            Builder & Full-Stack Developer shipping SmoothSend.xyz and autonomous AI agents. Obsessed with revenue dashboards and clean dev experiences.
           </p>
 
-          <button className="liquid-glass rounded-full px-8 py-3 text-foreground text-sm font-medium hover:bg-foreground/5 transition-colors mt-6">
-            Manifesto
-          </button>
         </div>
 
         {/* Social Icons */}
         <div className="relative z-10 flex justify-center gap-4 pb-12">
-          {[Instagram, Twitter, Globe].map((Icon, i) => (
-            <button key={i} className="liquid-glass rounded-full p-4 text-foreground/80 hover:text-foreground hover:bg-foreground/5 transition-all">
+          {[
+            { Icon: Twitter, href: "https://x.com/zorothebuilder" },
+            { Icon: Github, href: "https://github.com/ivedmohan" },
+            { Icon: Linkedin, href: "https://linkedin.com/in/ivedmohan" }
+          ].map(({ Icon, href }, i) => (
+            <a 
+              key={i} 
+              href={href} 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="liquid-glass rounded-full p-4 text-white/80 hover:text-white hover:bg-white/5 transition-all"
+            >
               <Icon size={20} />
-            </button>
+            </a>
           ))}
         </div>
       </section>
 
       <AboutSection />
-      <FeaturedVideoSection />
+      <CapabilitiesSection />
+      <StatsSection />
+      <TechStackSection />
+      <FeaturedProjectSection />
       <PhilosophySection />
-      <ServicesSection />
+      <ProjectsSection />
+      <HackathonWinsSection />
+
+      {/* CONNECT SECTION */}
+      <section id="connect" className="relative py-32 md:py-48 px-6 overflow-hidden bg-black">
+        <video
+          src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260314_131748_f2ca2a28-fed7-44c8-b9a9-bd9acdd5ec31.mp4"
+          muted autoPlay loop playsInline
+          className="absolute inset-0 w-full h-full object-cover opacity-20"
+        />
+        <div className="absolute top-0 left-0 right-0 h-40 bg-gradient-to-b from-black to-transparent z-[1]" />
+        <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-black to-transparent z-[1]" />
+
+        <div className="max-w-4xl mx-auto text-center relative z-10">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.7 }}
+          >
+            <h2 className="text-5xl md:text-7xl text-white tracking-tight mb-8 font-serif italic" style={{ fontFamily: "'Instrument Serif', serif" }}>
+              Let's build then <em className="italic transition-all hover:text-white/80">something cool</em>.
+            </h2>
+            <p className="text-white/60 text-lg mb-12 max-w-2xl mx-auto font-light">
+              Open for collaborations, freelance projects, or just a chat about Web3 and AI.
+            </p>
+            <div className="flex flex-wrap items-center justify-center gap-6">
+              <a href="mailto:vedmohan0@gmail.com" className="liquid-glass rounded-full px-8 py-4 text-white font-medium flex items-center gap-3 hover:bg-white/10 transition-all border border-white/5">
+                <Mail size={20} />
+                vedmohan0@gmail.com
+              </a>
+              <div className="flex items-center gap-4">
+                <a href="https://github.com/ivedmohan" target="_blank" rel="noopener noreferrer" className="liquid-glass rounded-full p-4 text-white hover:bg-white/10 transition-all border border-white/5">
+                  <Github size={20} />
+                </a>
+                <a href="https://linkedin.com/in/ivedmohan" target="_blank" rel="noopener noreferrer" className="liquid-glass rounded-full p-4 text-white hover:bg-white/10 transition-all border border-white/5">
+                  <Linkedin size={20} />
+                </a>
+                <a href="https://x.com/zorothebuilder" target="_blank" rel="noopener noreferrer" className="liquid-glass rounded-full p-4 text-white hover:bg-white/10 transition-all border border-white/5">
+                  <Twitter size={20} />
+                </a>
+              </div>
+            </div>
+            
+            <footer className="mt-24 pt-8 border-t border-white/10 w-full flex flex-col md:flex-row items-center justify-between gap-4">
+              <span className="text-white/20 text-xs uppercase tracking-widest">© 2026 Ved Mohan</span>
+              <span className="text-white/20 text-xs uppercase tracking-widest">Digital Architect — Web3 x AI</span>
+            </footer>
+          </motion.div>
+        </div>
+      </section>
     </div>
   );
 };

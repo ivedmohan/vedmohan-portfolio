@@ -48,24 +48,25 @@ const AboutSection = () => {
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6 }}
         >
-          About Us
+          About Me
         </motion.p>
         <motion.h2
           ref={headingRef}
+          id="about"
           className="text-4xl md:text-6xl lg:text-7xl text-foreground leading-[1.1] tracking-tight"
           initial={{ opacity: 0, y: 40 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.8, delay: 0.1 }}
         >
-          Pioneering{" "}
+          Final-year ECE student{" "}
           <em className="italic text-foreground/60" style={{ fontFamily: "'Instrument Serif', serif" }}>
-            ideas
+            at MSIT
           </em>{" "}
-          for
+          building in
           <br className="hidden md:block" />
-          {" "}minds that{" "}
+          {" "}Web3 since{" "}
           <em className="italic text-foreground/60" style={{ fontFamily: "'Instrument Serif', serif" }}>
-            create, build, and inspire.
+            early 2023.
           </em>
         </motion.h2>
       </div>
