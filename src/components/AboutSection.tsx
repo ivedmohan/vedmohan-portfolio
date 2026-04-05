@@ -1,0 +1,45 @@
+import { useRef } from "react";
+import { motion, useInView } from "framer-motion";
+
+const AboutSection = () => {
+  const ref = useRef(null);
+  const inView = useInView(ref, { once: true, margin: "-100px" });
+
+  return (
+    <section
+      ref={ref}
+      className="bg-background pt-32 md:pt-44 pb-10 md:pb-14 px-6 overflow-hidden relative"
+    >
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_rgba(255,255,255,0.03)_0%,_transparent_70%)]" />
+      <div className="max-w-6xl mx-auto relative">
+        <motion.p
+          className="text-foreground/40 text-sm tracking-widest uppercase mb-8"
+          initial={{ opacity: 0, y: 20 }}
+          animate={inView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.6 }}
+        >
+          About Us
+        </motion.p>
+        <motion.h2
+          className="text-4xl md:text-6xl lg:text-7xl text-foreground leading-[1.1] tracking-tight"
+          initial={{ opacity: 0, y: 40 }}
+          animate={inView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.8, delay: 0.1 }}
+        >
+          Pioneering{" "}
+          <em className="italic text-foreground/60" style={{ fontFamily: "'Instrument Serif', serif" }}>
+            ideas
+          </em>{" "}
+          for
+          <br className="hidden md:block" />
+          {" "}minds that{" "}
+          <em className="italic text-foreground/60" style={{ fontFamily: "'Instrument Serif', serif" }}>
+            create, build, and inspire.
+          </em>
+        </motion.h2>
+      </div>
+    </section>
+  );
+};
+
+export default AboutSection;
