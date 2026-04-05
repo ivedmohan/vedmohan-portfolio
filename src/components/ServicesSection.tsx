@@ -1,6 +1,10 @@
-import { useRef } from "react";
+import { useRef, useEffect } from "react";
 import { motion, useInView } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
 
 const cards = [
   {
@@ -19,7 +23,39 @@ const cards = [
 
 const ServicesSection = () => {
   const ref = useRef(null);
+  const cardsRef = useRef<(HTMLDivElement | null)[]>([]);
   const inView = useInView(ref, { once: true, margin: "-100px" });
+
+  useEffect(() => {
+    const tweens: gsap.core.Tween[] = [];
+
+    cardsRef.current.forEach((el, i) => {
+      if (!el) return;
+      tweens.push(
+        gsap.fromTo(
+          el,
+          { y: 40 + i * 20 },
+          {
+            y: -20 - i * 10,
+            ease: "none",
+            scrollTrigger: {
+              trigger: el,
+              start: "top bottom",
+              end: "bottom top",
+              scrub: true,
+            },
+          }
+        )
+      );
+    });
+
+    return () => {
+      tweens.forEach((t) => {
+        t.scrollTrigger?.kill();
+        t.kill();
+      });
+    };
+  }, []);
 
   return (
     <section ref={ref} className="bg-background py-28 md:py-40 px-6 overflow-hidden relative">
@@ -39,6 +75,7 @@ const ServicesSection = () => {
           {cards.map((card, i) => (
             <motion.div
               key={card.tag}
+              ref={(el) => { cardsRef.current[i] = el; }}
               className="liquid-glass rounded-3xl overflow-hidden group"
               initial={{ opacity: 0, y: 50 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}

@@ -25,6 +25,7 @@ function animateOpacity(
 }
 
 const Index = () => {
+  useSmoothScroll();
   const videoRef = useRef<HTMLVideoElement>(null);
 
   const onCanPlay = useCallback(() => {

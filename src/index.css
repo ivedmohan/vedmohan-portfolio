@@ -33,6 +33,15 @@
   * {
     @apply border-border;
   }
+  html.lenis, html.lenis body {
+    height: auto;
+  }
+  .lenis.lenis-smooth {
+    scroll-behavior: auto !important;
+  }
+  .lenis.lenis-smooth [data-lenis-prevent] {
+    overscroll-behavior: contain;
+  }
   body {
     @apply bg-background text-foreground;
     font-family: 'Instrument Serif', serif;

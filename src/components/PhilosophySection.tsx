@@ -1,12 +1,67 @@
-import { useRef } from "react";
+import { useRef, useEffect } from "react";
 import { motion, useInView } from "framer-motion";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
 
 const VIDEO_URL =
   "https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260307_083826_e938b29f-a43a-41ec-a153-3d4730578ab8.mp4";
 
 const PhilosophySection = () => {
   const ref = useRef(null);
+  const videoWrapRef = useRef<HTMLDivElement>(null);
+  const textWrapRef = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: "-100px" });
+
+  useEffect(() => {
+    const tweens: gsap.core.Tween[] = [];
+
+    if (videoWrapRef.current) {
+      tweens.push(
+        gsap.fromTo(
+          videoWrapRef.current,
+          { y: 60 },
+          {
+            y: -40,
+            ease: "none",
+            scrollTrigger: {
+              trigger: videoWrapRef.current,
+              start: "top bottom",
+              end: "bottom top",
+              scrub: true,
+            },
+          }
+        )
+      );
+    }
+
+    if (textWrapRef.current) {
+      tweens.push(
+        gsap.fromTo(
+          textWrapRef.current,
+          { y: 40 },
+          {
+            y: -20,
+            ease: "none",
+            scrollTrigger: {
+              trigger: textWrapRef.current,
+              start: "top bottom",
+              end: "bottom top",
+              scrub: true,
+            },
+          }
+        )
+      );
+    }
+
+    return () => {
+      tweens.forEach((t) => {
+        t.scrollTrigger?.kill();
+        t.kill();
+      });
+    };
+  }, []);
 
   return (
     <section ref={ref} className="bg-background py-28 md:py-40 px-6 overflow-hidden">
@@ -26,6 +81,7 @@ const PhilosophySection = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
           <motion.div
+            ref={videoWrapRef}
             className="rounded-3xl overflow-hidden aspect-[4/3]"
             initial={{ opacity: 0, x: -40 }}
             animate={inView ? { opacity: 1, x: 0 } : {}}
@@ -43,6 +99,7 @@ const PhilosophySection = () => {
           </motion.div>
 
           <motion.div
+            ref={textWrapRef}
             className="flex flex-col justify-center"
             initial={{ opacity: 0, x: 40 }}
             animate={inView ? { opacity: 1, x: 0 } : {}}
