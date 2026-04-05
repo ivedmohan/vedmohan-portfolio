@@ -1,6 +1,6 @@
 import { useRef, useCallback, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { Globe, ArrowRight, Instagram, Twitter, Mail, Github, Linkedin } from "lucide-react";
+import { Globe, ArrowRight, Instagram, Twitter, Mail, Github, Linkedin, Download } from "lucide-react";
 import AboutSection from "@/components/AboutSection";
 import CapabilitiesSection from "@/components/CapabilitiesSection";
 import StatsSection from "@/components/StatsSection";
@@ -9,6 +9,9 @@ import FeaturedProjectSection from "@/components/FeaturedProjectSection";
 import PhilosophySection from "@/components/PhilosophySection";
 import ProjectsSection from "@/components/ProjectsSection";
 import HackathonWinsSection from "@/components/HackathonWinsSection";
+import ExperienceSection from "@/components/ExperienceSection";
+import TestimonialsSection from "@/components/TestimonialsSection";
+import ContentSection from "@/components/ContentSection";
 import LoadingScreen from "@/components/LoadingScreen";
 import GlassCursor from "@/components/GlassCursor";
 import { useSmoothScroll } from "@/hooks/useSmoothScroll";
@@ -75,7 +78,7 @@ const Index = () => {
           autoPlay
           playsInline
           preload="auto"
-          className="absolute inset-0 w-full h-full object-cover object-bottom"
+          className="absolute inset-0 w-full h-full object-cover object-bottom transition-all duration-1000 opacity-40 blur-[1px]"
           style={{ opacity: 0 }}
           onCanPlay={onCanPlay}
           onTimeUpdate={onTimeUpdate}
@@ -90,8 +93,10 @@ const Index = () => {
       <nav className="fixed top-0 left-0 right-0 z-50 flex justify-center pt-6 px-6">
         <div className="liquid-glass rounded-full px-2 py-2 flex items-center justify-between gap-4 border border-white/5">
           <div className="flex items-center pl-2">
-            <Globe size={20} className="text-white/60" />
-            <span className="text-white font-medium text-sm ml-2 mr-4 whitespace-nowrap">Ved Mohan</span>
+            <div className="w-8 h-8 rounded-full liquid-glass flex items-center justify-center border border-white/10 mr-3">
+              <span className="text-white text-xs font-serif italic" style={{ fontFamily: "'Instrument Serif', serif" }}>VM</span>
+            </div>
+            <span className="text-white font-medium text-sm mr-4 whitespace-nowrap">Ved Mohan</span>
           </div>
           
           <div className="w-px h-4 bg-white/10 hidden sm:block" />
@@ -99,9 +104,9 @@ const Index = () => {
           <div className="hidden md:flex items-center gap-1">
             {[
               { name: "About", href: "#about" },
+              { name: "Experience", href: "#experience" },
               { name: "Projects", href: "#projects" },
-              { name: "Wins", href: "#wins" },
-              { name: "Stack", href: "#stack" },
+              { name: "Content", href: "#content" },
             ].map((link) => (
               <a
                 key={link.name}
@@ -117,8 +122,15 @@ const Index = () => {
 
           <div className="flex items-center gap-2">
             <a 
+              href="#"
+              className="group liquid-glass rounded-full px-5 py-2 text-white text-xs font-medium hover:bg-white/10 transition-colors border border-white/10 flex items-center gap-2"
+            >
+              <Download size={14} className="text-white/40 group-hover:text-white transition-colors" />
+              CV
+            </a>
+            <a 
               href="mailto:vedmohan0@gmail.com"
-              className="liquid-glass rounded-full px-5 py-2 text-white text-xs font-medium hover:bg-white/10 transition-colors border border-white/10"
+              className="liquid-glass rounded-full px-6 py-2 text-white text-xs font-medium hover:bg-white/10 transition-colors border border-white/10 bg-white/5"
             >
               Hire Me
             </a>
@@ -135,13 +147,19 @@ const Index = () => {
             Building then <em className="italic">the Future</em>.
           </h1>
 
-          <div className="mt-12">
+          <div className="mt-12 flex flex-col sm:flex-row items-center gap-6">
             <a 
               href="mailto:vedmohan0@gmail.com"
               className="liquid-glass rounded-full px-10 py-5 text-white text-lg font-medium hover:bg-white/10 transition-all border border-white/10 inline-flex items-center gap-3 group"
             >
               Hire Me 
               <ArrowRight size={20} className="transition-transform group-hover:translate-x-1" />
+            </a>
+            <a 
+              href="#"
+              className="text-white/40 hover:text-white text-sm uppercase tracking-[0.2em] font-medium transition-all border-b border-transparent hover:border-white/20 pb-1"
+            >
+              View CV / Resume
             </a>
           </div>
 
@@ -163,7 +181,7 @@ const Index = () => {
               href={href} 
               target="_blank" 
               rel="noopener noreferrer"
-              className="liquid-glass rounded-full p-4 text-white/80 hover:text-white hover:bg-white/5 transition-all"
+              className="liquid-glass rounded-full p-4 text-white/80 hover:text-white hover:bg-white/5 transition-all outline outline-1 outline-white/5"
             >
               <Icon size={20} />
             </a>
@@ -173,19 +191,22 @@ const Index = () => {
 
       <AboutSection />
       <CapabilitiesSection />
+      {/* <ExperienceSection /> */}
       <StatsSection />
       <TechStackSection />
       <FeaturedProjectSection />
+      <ContentSection />
       <PhilosophySection />
       <ProjectsSection />
       <HackathonWinsSection />
+      {/* <TestimonialsSection /> */}
 
       {/* CONNECT SECTION */}
       <section id="connect" className="relative py-32 md:py-48 px-6 overflow-hidden bg-black">
         <video
           src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260314_131748_f2ca2a28-fed7-44c8-b9a9-bd9acdd5ec31.mp4"
           muted autoPlay loop playsInline
-          className="absolute inset-0 w-full h-full object-cover opacity-20"
+          className="absolute inset-0 w-full h-full object-cover opacity-30 blur-[1px]"
         />
         <div className="absolute top-0 left-0 right-0 h-40 bg-gradient-to-b from-black to-transparent z-[1]" />
         <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-black to-transparent z-[1]" />
