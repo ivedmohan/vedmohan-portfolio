@@ -11,7 +11,7 @@ const cards = [
     video: "https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260405_074625_a81f018a-956b-43fb-9aee-4d1508e30e6a.mp4",
     tag: "Startup — Mainnet",
     title: "SmoothSend.xyz",
-    description: "Gasless token transfer SDK powering 6k+ monthly transactions with 2 B2B clients in active deployment. Pay fees in any token.",
+    description: "Gasless transfer SDK powering 6k+ monthly transactions with 2 B2B clients in active deployment. Pay fees in any token.",
     href: "https://www.smoothsend.xyz/",
     span: "md:col-span-8",
   },

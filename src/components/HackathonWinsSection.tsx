@@ -28,7 +28,7 @@ const wins = [
     icon: Zap,
   },
   {
-    title: "Akash Winner",
+    title: "$115 Akash Track Winner",
     subtitle: "HackOdisha 5.0",
     description: "Best deployment on Akash decentralized cloud.",
     icon: Trophy,

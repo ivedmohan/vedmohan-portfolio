@@ -3,10 +3,10 @@ import { motion, useInView } from "framer-motion";
 
 const milestones = [
   {
-    year: "2024",
+    year: "2025",
     title: "Founder & Lead Architect",
     company: "SmoothSend.xyz",
-    desc: "Architecting a gasless token transfer SDK for Aptos & Avalanche. Scaling to 6,000+ monthly transactions with B2B pilot integrations.",
+    desc: "Architecting a gasless transfer SDK for Aptos & Avalanche. Scaling to 6,000+ monthly transactions with B2B pilot integrations.",
     type: "Startup"
   },
   {
@@ -17,14 +17,14 @@ const milestones = [
     type: "Achievements"
   },
   {
-    year: "2023",
+    year: "2025",
     title: "Protocol Research & Development",
     company: "Freelance / Open Source",
     desc: "Deep-diving into ZK-proofs and smart contract security. Built yield aggregators and autonomous AI agent prototypes.",
     type: "Freelance"
   },
   {
-    year: "2021 - 2025",
+    year: "2022 - 2026",
     title: "ECE Undergrad",
     company: "MSIT",
     desc: "Mastering the fundamentals of hardware and software at Maharaja Surajmal Institute of Technology.",

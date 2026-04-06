@@ -41,7 +41,7 @@ const FeaturedProjectSection = () => {
                 SmoothSend.xyz
               </h3>
               <p className="text-white/60 text-base md:text-lg leading-relaxed font-light">
-                A high-performance gasless token transfer SDK live on <span className="text-white/90">Aptos & Avalanche</span> mainnets. Pay fees in the same token you're sending—eliminating the need for native gas assets and simplifying user onboarding.
+                A high-performance gasless transfer SDK live on <span className="text-white/90">Aptos & Avalanche</span> mainnets. Pay fees in the same token you're sending—eliminating the need for native gas assets and simplifying user onboarding.
               </p>
             </div>
             

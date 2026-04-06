@@ -1,6 +1,6 @@
-import { useRef, useCallback, useState } from "react";
+import { useRef, useCallback, useState, useEffect } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { Globe, ArrowRight, Instagram, Twitter, Mail, Github, Linkedin, Download } from "lucide-react";
+import { Globe, ArrowRight, Instagram, Twitter, Mail, Github, Linkedin, Download, Volume2, VolumeX } from "lucide-react";
 import AboutSection from "@/components/AboutSection";
 import CapabilitiesSection from "@/components/CapabilitiesSection";
 import StatsSection from "@/components/StatsSection";
@@ -16,8 +16,7 @@ import LoadingScreen from "@/components/LoadingScreen";
 import GlassCursor from "@/components/GlassCursor";
 import { useSmoothScroll } from "@/hooks/useSmoothScroll";
 
-const HERO_VIDEO_URL =
-  "https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260405_074625_a81f018a-956b-43fb-9aee-4d1508e30e6a.mp4";
+const HERO_VIDEO_URL = "/catbike.mp4";
 
 function animateOpacity(
   el: HTMLVideoElement,
@@ -37,12 +36,36 @@ function animateOpacity(
 const Index = () => {
   useSmoothScroll();
   const [loading, setLoading] = useState(true);
+  const [isMuted, setIsMuted] = useState(true);
   const videoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    if (videoRef.current) {
+      videoRef.current.volume = 0.3;
+    }
+  }, [loading]);
+
+  const toggleMute = () => {
+    if (videoRef.current) {
+      const newMuted = !isMuted;
+      videoRef.current.muted = newMuted;
+      setIsMuted(newMuted);
+      if (!newMuted) {
+        videoRef.current.play().catch(() => {
+          // Handle autoplay block
+        });
+      }
+    }
+  };
 
   const onCanPlay = useCallback(() => {
     const v = videoRef.current;
     if (!v) return;
-    v.play();
+    v.play().catch(() => {
+       // Autoplay with sound might be blocked, starts muted
+       v.muted = true;
+       setIsMuted(true);
+    });
     animateOpacity(v, 0, 1, 500);
   }, []);
 
@@ -60,7 +83,7 @@ const Index = () => {
     v.style.opacity = "0";
     setTimeout(() => {
       v.currentTime = 0;
-      v.play();
+      v.play().catch(() => {});
       animateOpacity(v, 0, 1, 500);
     }, 100);
   }, []);
@@ -74,16 +97,18 @@ const Index = () => {
         <video
           ref={videoRef}
           src={HERO_VIDEO_URL}
-          muted
+          muted={isMuted}
           autoPlay
           playsInline
           preload="auto"
-          className="absolute inset-0 w-full h-full object-cover object-bottom transition-all duration-1000 opacity-40 blur-[1px]"
+          className="absolute inset-0 w-full h-full object-cover object-bottom transition-all duration-1000 opacity-35 blur-[1px] brightness-[0.55] contrast-[1.1]"
           style={{ opacity: 0 }}
           onCanPlay={onCanPlay}
           onTimeUpdate={onTimeUpdate}
           onEnded={onEnded}
         />
+        {/* Cinematic Vignette */}
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_transparent_0%,_rgba(0,0,0,0.65)_100%)] pointer-events-none z-[1]" />
 
       <AnimatePresence>
         {loading && <LoadingScreen onComplete={() => setLoading(false)} />}
@@ -93,9 +118,6 @@ const Index = () => {
       <nav className="fixed top-0 left-0 right-0 z-50 flex justify-center pt-6 px-6">
         <div className="liquid-glass rounded-full px-2 py-2 flex items-center justify-between gap-4 border border-white/5">
           <div className="flex items-center pl-2">
-            <div className="w-8 h-8 rounded-full liquid-glass flex items-center justify-center border border-white/10 mr-3">
-              <span className="text-white text-xs font-serif italic" style={{ fontFamily: "'Instrument Serif', serif" }}>VM</span>
-            </div>
             <span className="text-white font-medium text-sm mr-4 whitespace-nowrap">Ved Mohan</span>
           </div>
           
@@ -122,7 +144,9 @@ const Index = () => {
 
           <div className="flex items-center gap-2">
             <a 
-              href="#"
+              href="https://drive.google.com/file/d/16kZBAqm2iPIwfo2YI6_GPTXooJkLrpxX/view?usp=sharing"
+              target="_blank"
+              rel="noopener noreferrer"
               className="group liquid-glass rounded-full px-5 py-2 text-white text-xs font-medium hover:bg-white/10 transition-colors border border-white/10 flex items-center gap-2"
             >
               <Download size={14} className="text-white/40 group-hover:text-white transition-colors" />
@@ -156,7 +180,9 @@ const Index = () => {
               <ArrowRight size={20} className="transition-transform group-hover:translate-x-1" />
             </a>
             <a 
-              href="#"
+              href="https://drive.google.com/file/d/16kZBAqm2iPIwfo2YI6_GPTXooJkLrpxX/view?usp=sharing"
+              target="_blank"
+              rel="noopener noreferrer"
               className="text-white/40 hover:text-white text-sm uppercase tracking-[0.2em] font-medium transition-all border-b border-transparent hover:border-white/20 pb-1"
             >
               View CV / Resume
@@ -170,22 +196,35 @@ const Index = () => {
         </div>
 
         {/* Social Icons */}
-        <div className="relative z-10 flex justify-center gap-4 pb-12">
-          {[
-            { Icon: Twitter, href: "https://x.com/zorothebuilder" },
-            { Icon: Github, href: "https://github.com/ivedmohan" },
-            { Icon: Linkedin, href: "https://linkedin.com/in/ivedmohan" }
-          ].map(({ Icon, href }, i) => (
-            <a 
-              key={i} 
-              href={href} 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="liquid-glass rounded-full p-4 text-white/80 hover:text-white hover:bg-white/5 transition-all outline outline-1 outline-white/5"
-            >
-              <Icon size={20} />
-            </a>
-          ))}
+        <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-8 px-12 pb-12 w-full">
+          <div className="flex gap-4">
+            {[
+              { Icon: Twitter, href: "https://x.com/zorothebuilder" },
+              { Icon: Github, href: "https://github.com/ivedmohan" },
+              { Icon: Linkedin, href: "https://linkedin.com/in/ivedmohan" }
+            ].map(({ Icon, href }, i) => (
+              <a 
+                key={i} 
+                href={href} 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="liquid-glass rounded-full p-4 text-white/80 hover:text-white hover:bg-white/5 transition-all outline outline-1 outline-white/5"
+              >
+                <Icon size={20} />
+              </a>
+            ))}
+          </div>
+
+          {/* Audio Toggle */}
+          <button
+            onClick={toggleMute}
+            className="liquid-glass rounded-full p-4 text-white/80 hover:text-white hover:bg-white/5 transition-all outline outline-1 outline-white/5 flex items-center gap-3 group"
+          >
+            <span className="text-[10px] uppercase tracking-widest font-medium opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-all transform translate-x-0 md:translate-x-2 md:group-hover:translate-x-0">
+              {isMuted ? "Unmute Ambient" : "Mute Experience"}
+            </span>
+            {isMuted ? <VolumeX size={20} /> : <Volume2 size={20} />}
+          </button>
         </div>
       </section>
 
@@ -195,7 +234,7 @@ const Index = () => {
       <StatsSection />
       <TechStackSection />
       <FeaturedProjectSection />
-      <ContentSection />
+      {/* <ContentSection /> */}
       <PhilosophySection />
       <ProjectsSection />
       <HackathonWinsSection />
