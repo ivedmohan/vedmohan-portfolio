@@ -108,10 +108,10 @@ const PhilosophySection = () => {
           >
             <div className="mb-8">
               <p className="text-foreground/40 text-xs tracking-widest uppercase mb-4">
-                Strategy & Vision
+                Architecture & Agentic State
               </p>
-              <p className="text-foreground/70 text-base md:text-lg leading-relaxed">
-                Every meaningful breakthrough begins at the intersection of disciplined strategy and remarkable creative vision. We operate at that crossroads, turning bold thinking into tangible outcomes that move people and reshape industries.
+              <p className="text-foreground/70 text-base md:text-lg leading-relaxed font-light">
+                I build at the edge where autonomous agents meet trustless state. From gasless relayer infrastructure to AI-driven yield strategies, my goal is to remove the friction between complex protocols and the people who use them.
               </p>
             </div>
 
@@ -119,10 +119,10 @@ const PhilosophySection = () => {
 
             <div className="mt-8">
               <p className="text-foreground/40 text-xs tracking-widest uppercase mb-4">
-                Building the future
+                Programmable Agency
               </p>
-              <p className="text-foreground/70 text-base md:text-lg leading-relaxed">
-                We believe that the best work emerges when curiosity meets conviction. Our process is designed to uncover hidden opportunities and translate them into experiences that resonate long after the first impression.
+              <p className="text-foreground/70 text-base md:text-lg leading-relaxed font-light">
+                For me, Web3 isn't just about decentralization—it's about building programmable agency. I'm focused on creating the primitive layers that allow AI and blockchain to interact seamlessly, ensuring the future of finance is both open and automated.
               </p>
             </div>
           </motion.div>

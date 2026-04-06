@@ -189,8 +189,11 @@ const Index = () => {
         {/* Hero Content */}
         <div className="relative z-10 flex-1 flex flex-col items-center justify-center px-6 py-12 text-center">
           <h1 className="text-5xl md:text-8xl lg:text-9xl text-foreground tracking-tight whitespace-normal md:whitespace-nowrap px-4" style={{ fontFamily: "'Instrument Serif', serif" }}>
-            Building then <em className="italic">the Future</em>.
+            Building <em className="italic">the Future</em>.
           </h1>
+          <p className="text-white/40 text-[10px] md:text-xs uppercase tracking-[0.3em] font-medium mt-6 mb-2 max-w-2xl">
+            Final-year ECE student • Founder of SmoothSend • New Delhi
+          </p>
           <div className="mt-12 flex flex-col sm:flex-row items-center gap-6">
             <a href="mailto:vedmohan0@gmail.com" className="liquid-glass rounded-full px-10 py-5 text-white text-lg font-medium hover:bg-white/10 transition-all border border-white/10 inline-flex items-center gap-3 group">
               Hire Me <ArrowRight size={20} className="transition-transform group-hover:translate-x-1" />
@@ -255,7 +258,7 @@ const Index = () => {
         <div className="max-w-4xl mx-auto text-center relative z-10">
           <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.7 }}>
             <h2 className="text-5xl md:text-7xl text-white tracking-tight mb-8 font-serif italic" style={{ fontFamily: "'Instrument Serif', serif" }}>
-              Let's build then <em className="italic transition-all hover:text-white/80">something cool</em>.
+              Let's build <em className="italic transition-all hover:text-white/80">something cool</em>.
             </h2>
             <p className="text-white/60 text-lg mb-12 max-w-2xl mx-auto font-light">
               Open for collaborations, freelance projects, or just a chat about Web3 and AI.
