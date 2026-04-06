@@ -1,29 +1,29 @@
-import { useRef, useCallback, useState, useEffect } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import { useRef, useCallback, useState, useEffect, lazy, Suspense } from "react";
+import { AnimatePresence, motion, useInView } from "framer-motion";
 import { Globe, ArrowRight, Instagram, Twitter, Mail, Github, Linkedin, Download, Volume2, VolumeX } from "lucide-react";
-import AboutSection from "@/components/AboutSection";
-import CapabilitiesSection from "@/components/CapabilitiesSection";
-import StatsSection from "@/components/StatsSection";
-import TechStackSection from "@/components/TechStackSection";
-import FeaturedProjectSection from "@/components/FeaturedProjectSection";
-import PhilosophySection from "@/components/PhilosophySection";
-import ProjectsSection from "@/components/ProjectsSection";
-import HackathonWinsSection from "@/components/HackathonWinsSection";
-import ExperienceSection from "@/components/ExperienceSection";
-import TestimonialsSection from "@/components/TestimonialsSection";
-import ContentSection from "@/components/ContentSection";
 import LoadingScreen from "@/components/LoadingScreen";
 import GlassCursor from "@/components/GlassCursor";
 import { useSmoothScroll } from "@/hooks/useSmoothScroll";
 
+// Constant for the main video
 const HERO_VIDEO_URL = "/catbike.mp4";
 
-function animateOpacity(
-  el: HTMLVideoElement,
-  from: number,
-  to: number,
-  duration: number
-) {
+// Critical components loaded immediately
+import AboutSection from "@/components/AboutSection";
+import CapabilitiesSection from "@/components/CapabilitiesSection";
+
+// Non-critical sections lazy-loaded for performance
+const StatsSection = lazy(() => import("@/components/StatsSection"));
+const TechStackSection = lazy(() => import("@/components/TechStackSection"));
+const FeaturedProjectSection = lazy(() => import("@/components/FeaturedProjectSection"));
+const PhilosophySection = lazy(() => import("@/components/PhilosophySection"));
+const ProjectsSection = lazy(() => import("@/components/ProjectsSection"));
+const HackathonWinsSection = lazy(() => import("@/components/HackathonWinsSection"));
+const ExperienceSection = lazy(() => import("@/components/ExperienceSection"));
+const TestimonialsSection = lazy(() => import("@/components/TestimonialsSection"));
+const ContentSection = lazy(() => import("@/components/ContentSection"));
+
+function animateOpacity(el: HTMLVideoElement, from: number, to: number, duration: number) {
   const start = performance.now();
   const step = (now: number) => {
     const t = Math.min((now - start) / duration, 1);
@@ -38,6 +38,37 @@ const Index = () => {
   const [loading, setLoading] = useState(true);
   const [isMuted, setIsMuted] = useState(true);
   const videoRef = useRef<HTMLVideoElement>(null);
+  const heroRef = useRef(null);
+  
+  // Use framer-motion's useInView to monitor Hero visibility
+  const isHeroInView = useInView(heroRef, { amount: 0.1 });
+  
+  // Track tab visibility
+  const [isTabVisible, setIsTabVisible] = useState(true);
+
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      setIsTabVisible(document.visibilityState === "visible");
+    };
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+    return () => document.removeEventListener("visibilitychange", handleVisibilityChange);
+  }, []);
+
+  // Performance Engine: Control video/audio based on visibility and scroll position
+  useEffect(() => {
+    const v = videoRef.current;
+    if (!v) return;
+
+    if (isHeroInView && isTabVisible) {
+      v.play().catch(() => {
+        // Fallback for autoplay blocks
+        v.muted = true;
+        setIsMuted(true);
+      });
+    } else {
+      v.pause();
+    }
+  }, [isHeroInView, isTabVisible]);
 
   useEffect(() => {
     if (videoRef.current) {
@@ -51,9 +82,7 @@ const Index = () => {
       videoRef.current.muted = newMuted;
       setIsMuted(newMuted);
       if (!newMuted) {
-        videoRef.current.play().catch(() => {
-          // Handle autoplay block
-        });
+        videoRef.current.play().catch(() => {});
       }
     }
   };
@@ -61,13 +90,14 @@ const Index = () => {
   const onCanPlay = useCallback(() => {
     const v = videoRef.current;
     if (!v) return;
-    v.play().catch(() => {
-       // Autoplay with sound might be blocked, starts muted
-       v.muted = true;
-       setIsMuted(true);
-    });
+    if (isHeroInView && isTabVisible) {
+      v.play().catch(() => {
+         v.muted = true;
+         setIsMuted(true);
+      });
+    }
     animateOpacity(v, 0, 1, 500);
-  }, []);
+  }, [isHeroInView, isTabVisible]);
 
   const onTimeUpdate = useCallback(() => {
     const v = videoRef.current;
@@ -83,17 +113,19 @@ const Index = () => {
     v.style.opacity = "0";
     setTimeout(() => {
       v.currentTime = 0;
-      v.play().catch(() => {});
+      if (isHeroInView && isTabVisible) {
+        v.play().catch(() => {});
+      }
       animateOpacity(v, 0, 1, 500);
     }, 100);
-  }, []);
+  }, [isHeroInView, isTabVisible]);
 
   return (
     <div className="bg-background">
       <GlassCursor />
       
       {/* HERO */}
-      <section className="min-h-screen relative flex flex-col overflow-hidden">
+      <section ref={heroRef} className="min-h-screen relative flex flex-col overflow-hidden">
         <video
           ref={videoRef}
           src={HERO_VIDEO_URL}
@@ -107,95 +139,72 @@ const Index = () => {
           onTimeUpdate={onTimeUpdate}
           onEnded={onEnded}
         />
-        {/* Cinematic Vignette */}
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_transparent_0%,_rgba(0,0,0,0.65)_100%)] pointer-events-none z-[1]" />
 
-      <AnimatePresence>
-        {loading && <LoadingScreen onComplete={() => setLoading(false)} />}
-      </AnimatePresence>
+        <AnimatePresence>
+          {loading && <LoadingScreen onComplete={() => setLoading(false)} />}
+        </AnimatePresence>
 
-      {/* Navbar */}
-      <nav className="fixed top-0 left-0 right-0 z-50 flex justify-center pt-6 px-6">
-        <div className="liquid-glass rounded-full px-2 py-2 flex items-center justify-between gap-4 border border-white/5">
-          <div className="flex items-center pl-2">
-            <span className="text-white font-medium text-sm mr-4 whitespace-nowrap">Ved Mohan</span>
-          </div>
-          
-          <div className="w-px h-4 bg-white/10 hidden sm:block" />
-
-          <div className="hidden md:flex items-center gap-1">
-            {[
-              { name: "About", href: "#about" },
-              { name: "Experience", href: "#experience" },
-              { name: "Projects", href: "#projects" },
-              { name: "Content", href: "#content" },
-            ].map((link) => (
-              <a
-                key={link.name}
-                href={link.href}
-                className="text-white/60 hover:text-white hover:bg-white/5 px-4 py-2 rounded-full text-xs font-medium transition-all"
+        {/* Navbar */}
+        <nav className="fixed top-0 left-0 right-0 z-50 flex justify-center pt-6 px-6">
+          <div className="liquid-glass rounded-full px-2 py-2 flex items-center justify-between gap-4 border border-white/5">
+            <div className="flex items-center pl-2">
+              <span className="text-white font-medium text-sm mr-4 whitespace-nowrap">Ved Mohan</span>
+            </div>
+            <div className="w-px h-4 bg-white/10 hidden sm:block" />
+            <div className="hidden md:flex items-center gap-1">
+              {[
+                { name: "About", href: "#about" },
+                { name: "Experience", href: "#experience" },
+                { name: "Projects", href: "#projects" },
+                { name: "Content", href: "#content" },
+              ].map((link) => (
+                <a
+                  key={link.name}
+                  href={link.href}
+                  className="text-white/60 hover:text-white hover:bg-white/5 px-4 py-2 rounded-full text-xs font-medium transition-all"
+                >
+                  {link.name}
+                </a>
+              ))}
+            </div>
+            <div className="w-px h-4 bg-white/10 hidden sm:block" />
+            <div className="flex items-center gap-2">
+              <a 
+                href="https://drive.google.com/file/d/16kZBAqm2iPIwfo2YI6_GPTXooJkLrpxX/view?usp=sharing"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group liquid-glass rounded-full px-5 py-2 text-white text-xs font-medium hover:bg-white/10 transition-colors border border-white/10 flex items-center gap-2"
               >
-                {link.name}
+                <Download size={14} className="text-white/40 group-hover:text-white transition-colors" />
+                CV
               </a>
-            ))}
+              <a href="mailto:vedmohan0@gmail.com" className="liquid-glass rounded-full px-6 py-2 text-white text-xs font-medium hover:bg-white/10 transition-colors border border-white/10 bg-white/5">
+                Hire Me
+              </a>
+            </div>
           </div>
-
-          <div className="w-px h-4 bg-white/10 hidden sm:block" />
-
-          <div className="flex items-center gap-2">
-            <a 
-              href="https://drive.google.com/file/d/16kZBAqm2iPIwfo2YI6_GPTXooJkLrpxX/view?usp=sharing"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="group liquid-glass rounded-full px-5 py-2 text-white text-xs font-medium hover:bg-white/10 transition-colors border border-white/10 flex items-center gap-2"
-            >
-              <Download size={14} className="text-white/40 group-hover:text-white transition-colors" />
-              CV
-            </a>
-            <a 
-              href="mailto:vedmohan0@gmail.com"
-              className="liquid-glass rounded-full px-6 py-2 text-white text-xs font-medium hover:bg-white/10 transition-colors border border-white/10 bg-white/5"
-            >
-              Hire Me
-            </a>
-          </div>
-        </div>
-      </nav>
+        </nav>
 
         {/* Hero Content */}
         <div className="relative z-10 flex-1 flex flex-col items-center justify-center px-6 py-12 text-center">
-          <h1
-            className="text-5xl md:text-8xl lg:text-9xl text-foreground tracking-tight whitespace-normal md:whitespace-nowrap px-4"
-            style={{ fontFamily: "'Instrument Serif', serif" }}
-          >
+          <h1 className="text-5xl md:text-8xl lg:text-9xl text-foreground tracking-tight whitespace-normal md:whitespace-nowrap px-4" style={{ fontFamily: "'Instrument Serif', serif" }}>
             Building then <em className="italic">the Future</em>.
           </h1>
-
           <div className="mt-12 flex flex-col sm:flex-row items-center gap-6">
-            <a 
-              href="mailto:vedmohan0@gmail.com"
-              className="liquid-glass rounded-full px-10 py-5 text-white text-lg font-medium hover:bg-white/10 transition-all border border-white/10 inline-flex items-center gap-3 group"
-            >
-              Hire Me 
-              <ArrowRight size={20} className="transition-transform group-hover:translate-x-1" />
+            <a href="mailto:vedmohan0@gmail.com" className="liquid-glass rounded-full px-10 py-5 text-white text-lg font-medium hover:bg-white/10 transition-all border border-white/10 inline-flex items-center gap-3 group">
+              Hire Me <ArrowRight size={20} className="transition-transform group-hover:translate-x-1" />
             </a>
-            <a 
-              href="https://drive.google.com/file/d/16kZBAqm2iPIwfo2YI6_GPTXooJkLrpxX/view?usp=sharing"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-white/40 hover:text-white text-sm uppercase tracking-[0.2em] font-medium transition-all border-b border-transparent hover:border-white/20 pb-1"
-            >
+            <a href="https://drive.google.com/file/d/16kZBAqm2iPIwfo2YI6_GPTXooJkLrpxX/view?usp=sharing" target="_blank" rel="noopener noreferrer" className="text-white/40 hover:text-white text-sm uppercase tracking-[0.2em] font-medium transition-all border-b border-transparent hover:border-white/20 pb-1">
               View CV / Resume
             </a>
           </div>
-
           <p className="text-foreground text-sm leading-relaxed px-4 mt-6 max-w-md font-light">
             Builder & Full-Stack Developer shipping SmoothSend.xyz and autonomous AI agents. Obsessed with revenue dashboards and clean dev experiences.
           </p>
-
         </div>
 
-        {/* Social Icons */}
+        {/* Social Icons & Audio Toggle */}
         <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-8 px-12 pb-12 w-full">
           <div className="flex gap-4">
             {[
@@ -203,23 +212,12 @@ const Index = () => {
               { Icon: Github, href: "https://github.com/ivedmohan" },
               { Icon: Linkedin, href: "https://linkedin.com/in/ivedmohan" }
             ].map(({ Icon, href }, i) => (
-              <a 
-                key={i} 
-                href={href} 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="liquid-glass rounded-full p-4 text-white/80 hover:text-white hover:bg-white/5 transition-all outline outline-1 outline-white/5"
-              >
+              <a key={i} href={href} target="_blank" rel="noopener noreferrer" className="liquid-glass rounded-full p-4 text-white/80 hover:text-white hover:bg-white/5 transition-all outline outline-1 outline-white/5">
                 <Icon size={20} />
               </a>
             ))}
           </div>
-
-          {/* Audio Toggle */}
-          <button
-            onClick={toggleMute}
-            className="liquid-glass rounded-full p-4 text-white/80 hover:text-white hover:bg-white/5 transition-all outline outline-1 outline-white/5 flex items-center gap-3 group"
-          >
+          <button onClick={toggleMute} className="liquid-glass rounded-full p-4 text-white/80 hover:text-white hover:bg-white/5 transition-all outline outline-1 outline-white/5 flex items-center gap-3 group">
             <span className="text-[10px] uppercase tracking-widest font-medium opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-all transform translate-x-0 md:translate-x-2 md:group-hover:translate-x-0">
               {isMuted ? "Unmute Ambient" : "Mute Experience"}
             </span>
@@ -230,15 +228,19 @@ const Index = () => {
 
       <AboutSection />
       <CapabilitiesSection />
-      {/* <ExperienceSection /> */}
-      <StatsSection />
-      <TechStackSection />
-      <FeaturedProjectSection />
-      {/* <ContentSection /> */}
-      <PhilosophySection />
-      <ProjectsSection />
-      <HackathonWinsSection />
-      {/* <TestimonialsSection /> */}
+      
+      {/* Lazy Loaded Sections */}
+      <Suspense fallback={<div className="h-40 flex items-center justify-center"><div className="w-8 h-8 rounded-full border-t-2 border-white/20 animate-spin" /></div>}>
+        {/* <ExperienceSection /> */}
+        <StatsSection />
+        <TechStackSection />
+        <FeaturedProjectSection />
+        {/* <ContentSection /> */}
+        <PhilosophySection />
+        <ProjectsSection />
+        <HackathonWinsSection />
+        {/* <TestimonialsSection /> */}
+      </Suspense>
 
       {/* CONNECT SECTION */}
       <section id="connect" className="relative py-32 md:py-48 px-6 overflow-hidden bg-black">
@@ -251,12 +253,7 @@ const Index = () => {
         <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-black to-transparent z-[1]" />
 
         <div className="max-w-4xl mx-auto text-center relative z-10">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.7 }}
-          >
+          <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.7 }}>
             <h2 className="text-5xl md:text-7xl text-white tracking-tight mb-8 font-serif italic" style={{ fontFamily: "'Instrument Serif', serif" }}>
               Let's build then <em className="italic transition-all hover:text-white/80">something cool</em>.
             </h2>
@@ -265,22 +262,14 @@ const Index = () => {
             </p>
             <div className="flex flex-wrap items-center justify-center gap-6">
               <a href="mailto:vedmohan0@gmail.com" className="liquid-glass rounded-full px-8 py-4 text-white font-medium flex items-center gap-3 hover:bg-white/10 transition-all border border-white/5">
-                <Mail size={20} />
-                vedmohan0@gmail.com
+                <Mail size={20} /> vedmohan0@gmail.com
               </a>
               <div className="flex items-center gap-4">
-                <a href="https://github.com/ivedmohan" target="_blank" rel="noopener noreferrer" className="liquid-glass rounded-full p-4 text-white hover:bg-white/10 transition-all border border-white/5">
-                  <Github size={20} />
-                </a>
-                <a href="https://linkedin.com/in/ivedmohan" target="_blank" rel="noopener noreferrer" className="liquid-glass rounded-full p-4 text-white hover:bg-white/10 transition-all border border-white/5">
-                  <Linkedin size={20} />
-                </a>
-                <a href="https://x.com/zorothebuilder" target="_blank" rel="noopener noreferrer" className="liquid-glass rounded-full p-4 text-white hover:bg-white/10 transition-all border border-white/5">
-                  <Twitter size={20} />
-                </a>
+                <a href="https://github.com/ivedmohan" target="_blank" rel="noopener noreferrer" className="liquid-glass rounded-full p-4 text-white hover:bg-white/10 transition-all border border-white/5"><Github size={20} /></a>
+                <a href="https://linkedin.com/in/ivedmohan" target="_blank" rel="noopener noreferrer" className="liquid-glass rounded-full p-4 text-white hover:bg-white/10 transition-all border border-white/5"><Linkedin size={20} /></a>
+                <a href="https://x.com/zorothebuilder" target="_blank" rel="noopener noreferrer" className="liquid-glass rounded-full p-4 text-white hover:bg-white/10 transition-all border border-white/5"><Twitter size={20} /></a>
               </div>
             </div>
-            
             <footer className="mt-24 pt-8 border-t border-white/10 w-full flex flex-col md:flex-row items-center justify-between gap-4">
               <span className="text-white/20 text-xs uppercase tracking-widest">© 2026 Ved Mohan</span>
               <span className="text-white/20 text-xs uppercase tracking-widest">Digital Architect — Web3 x AI</span>
