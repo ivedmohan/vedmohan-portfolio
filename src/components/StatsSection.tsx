@@ -5,7 +5,7 @@ const stats = [
   { value: "$3,715+", label: "Prizes Won" },
   { value: "5+", label: "Hackathon Wins" },
   { value: "6,000+", label: "On-chain Transactions" },
-  { value: "1", label: "Mainnet Integration (Sendra)" },
+  { value: "4+", label: "Freelance Projects Done" },
 ];
 
 const StatsSection = () => {
