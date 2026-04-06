@@ -18,7 +18,7 @@ const cards = [
   {
     video: "https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260314_131748_f2ca2a28-fed7-44c8-b9a9-bd9acdd5ec31.mp4",
     tag: "AI & DeFi",
-    title: "DefiZen Agent",
+    title: "DeFizen Agent",
     description: "Autonomous yield optimization agent on StarkNet. Won $1,000 bounty with +19% profit performance.",
     href: "https://defi-zen.vercel.app/",
     span: "md:col-span-4",
@@ -153,8 +153,8 @@ const ProjectsSection = () => {
                 </div>
 
                 {/* Hover Reveal from Lumina */}
-                <div className="absolute inset-0 bg-white/5 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-all duration-500 flex items-center justify-center p-4">
-                  <span className="liquid-glass rounded-full px-6 py-3 text-xs md:text-sm text-white border border-white/20 whitespace-nowrap">
+                <div className="absolute inset-0 bg-white/5 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-all duration-500 flex items-center justify-center p-4 text-center">
+                  <span className="liquid-glass rounded-full px-4 md:px-6 py-3 text-xs md:text-sm text-white border border-white/20 max-w-[calc(100%-1rem)]">
                     Explore Project — <em className="italic" style={{ fontFamily: "'Instrument Serif', serif" }}>{card.title}</em>
                   </span>
                 </div>
