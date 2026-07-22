@@ -58,16 +58,13 @@ const AboutSection = () => {
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.8, delay: 0.1 }}
         >
-          Final-year ECE student{" "}
+          Founder, builder, freelancer, and product developer{" "}
           <em className="italic text-foreground/60" style={{ fontFamily: "'Instrument Serif', serif" }}>
-            at MSIT
+            building across Web3 and AI
           </em>{" "}
-          building in
+          since
           <br className="hidden md:block" />
-          {" "}Web3 since{" "}
-          <em className="italic text-foreground/60" style={{ fontFamily: "'Instrument Serif', serif" }}>
-            early 2023.
-          </em>
+          {" "}late 2022. I also build practical software products, from developer infrastructure to inventory and POS billing systems.
         </motion.h2>
       </div>
     </section>

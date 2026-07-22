@@ -2,10 +2,10 @@ import { useRef } from "react";
 import { motion, useInView } from "framer-motion";
 
 const stats = [
-  { value: "$3,715+", label: "Prizes Won" },
-  { value: "5+", label: "Hackathon Wins" },
-  { value: "6,000+", label: "On-chain Transactions" },
-  { value: "4+", label: "Freelance Projects Done" },
+  { value: "$3,000+", label: "SmoothSend Volume" },
+  { value: "$3,815+", label: "Prizes Won" },
+  { value: "6+", label: "Hackathon Wins" },
+  { value: "4+", label: "Products & Client Builds" },
 ];
 
 const StatsSection = () => {

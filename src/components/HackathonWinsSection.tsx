@@ -34,6 +34,12 @@ const wins = [
     icon: Trophy,
   },
   {
+    title: "$100 AVAX",
+    subtitle: "AVAX Speedrun Winner",
+    description: "Recognized for building and shipping on Avalanche during the AVAX Speedrun.",
+    icon: Zap,
+  },
+  {
     title: "Aptos Alumni",
     subtitle: "Winter School Recognition",
     description: "Mainnet integrations and project recognition.",

@@ -192,7 +192,7 @@ const Index = () => {
             Building <em className="italic">the Future</em>.
           </h1>
           <p className="text-white/40 text-[10px] md:text-xs uppercase tracking-[0.3em] font-medium mt-6 mb-2 max-w-2xl">
-            Final-year ECE student • Founder of SmoothSend • New Delhi
+            Founder • Builder • Freelancer • Product Developer • New Delhi
           </p>
           <div className="mt-12 flex flex-col sm:flex-row items-center gap-6">
             <a href="mailto:vedmohan0@gmail.com" className="liquid-glass rounded-full px-10 py-5 text-white text-lg font-medium hover:bg-white/10 transition-all border border-white/10 inline-flex items-center gap-3 group">
@@ -203,7 +203,7 @@ const Index = () => {
             </a>
           </div>
           <p className="text-foreground text-sm leading-relaxed px-4 mt-6 max-w-md font-light">
-            Builder & Full-Stack Developer shipping SmoothSend.xyz and autonomous AI agents. Obsessed with revenue dashboards and clean dev experiences.
+            Founder of SmoothSend, product developer, and freelance builder working across Web3, AI agents, and practical software products. I care about shipping useful products with clean, thoughtful experiences.
           </p>
         </div>
 
@@ -234,11 +234,11 @@ const Index = () => {
       
       {/* Lazy Loaded Sections */}
       <Suspense fallback={<div className="h-40 flex items-center justify-center"><div className="w-8 h-8 rounded-full border-t-2 border-white/20 animate-spin" /></div>}>
-        {/* <ExperienceSection /> */}
+        <ExperienceSection />
         <StatsSection />
         <TechStackSection />
         <FeaturedProjectSection />
-        {/* <ContentSection /> */}
+        <ContentSection />
         <PhilosophySection />
         <ProjectsSection />
         <HackathonWinsSection />
@@ -275,7 +275,7 @@ const Index = () => {
             </div>
             <footer className="mt-24 pt-8 border-t border-white/10 w-full flex flex-col md:flex-row items-center justify-between gap-4">
               <span className="text-white/20 text-xs uppercase tracking-widest">© 2026 Ved Mohan</span>
-              <span className="text-white/20 text-xs uppercase tracking-widest">Digital Architect — Web3 x AI</span>
+              <span className="text-white/20 text-xs uppercase tracking-widest">Founder • Builder • Product Developer</span>
             </footer>
           </motion.div>
         </div>

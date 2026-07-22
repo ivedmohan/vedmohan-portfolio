@@ -3,32 +3,32 @@ import { motion, useInView } from "framer-motion";
 
 const milestones = [
   {
-    year: "2025",
+    year: "2026 — Now",
+    title: "Product Developer",
+    company: "EdTech Company",
+    desc: "Building and improving software products for an education technology company, working across product thinking, frontend experiences, and practical engineering.",
+    type: "Product"
+  },
+  {
+    year: "2025 — Now",
     title: "Founder & Lead Architect",
     company: "SmoothSend.xyz",
-    desc: "Architecting a gasless transfer SDK for Aptos & Avalanche. Scaling to 6,000+ monthly transactions with B2B pilot integrations.",
+    desc: "Building gasless transaction infrastructure for Aptos and Avalanche. SmoothSend has processed $3,000+ in volume while serving developers with a simpler, more reliable transaction experience.",
     type: "Startup"
   },
   {
-    year: "2024",
+    year: "2023 — Now",
     title: "Multiple Hackathon Champion",
     company: "Global Web3 Circuit",
-    desc: "Earned 5+ major wins (StarkNet, Aptos, etc.) with over $3,715 in prize money. Focused on cross-chain UX and account abstraction.",
+    desc: "Earned 6+ wins and more than $3,815 in prizes across Avalanche, Starknet, Aptos, Neo X, and other ecosystems. Focused on cross-chain UX, agents, and account abstraction.",
     type: "Achievements"
   },
   {
-    year: "2025",
-    title: "Protocol Research & Development",
-    company: "Freelance / Open Source",
-    desc: "Deep-diving into ZK-proofs and smart contract security. Built yield aggregators and autonomous AI agent prototypes.",
+    year: "2022 — Now",
+    title: "Freelance Builder",
+    company: "Independent / Open Source",
+    desc: "Designing and shipping full-stack products for clients and communities, including an inventory management and POS billing system, AI agents, and Web3 applications.",
     type: "Freelance"
-  },
-  {
-    year: "2022 - 2026",
-    title: "ECE Undergrad",
-    company: "MSIT",
-    desc: "Mastering the fundamentals of hardware and software at Maharaja Surajmal Institute of Technology.",
-    type: "Education"
   }
 ];
 
