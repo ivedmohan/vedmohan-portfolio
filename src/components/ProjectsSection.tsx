@@ -132,7 +132,7 @@ const ProjectsSection = () => {
                     <span className="text-white/40 text-xs tracking-widest uppercase">
                       {card.tag}
                     </span>
-                    <div className="liquid-glass rounded-full p-2 border border-white/10">
+                    <div className="liquid-glass aave-glass rounded-full p-2 border border-white/10">
                       <ArrowUpRight size={16} className="text-white" />
                     </div>
                   </div>
@@ -146,7 +146,7 @@ const ProjectsSection = () => {
 
                 {/* Hover Reveal from Lumina */}
                 <div className="absolute inset-0 bg-white/5 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-all duration-500 flex items-center justify-center p-4 text-center">
-                  <span className="liquid-glass rounded-full px-4 md:px-6 py-3 text-xs md:text-sm text-white border border-white/20 max-w-[calc(100%-1rem)]">
+                  <span className="liquid-glass aave-glass rounded-full px-4 md:px-6 py-3 text-xs md:text-sm text-white border border-white/20 max-w-[calc(100%-1rem)]">
                     Explore Project — <em className="italic" style={{ fontFamily: "'Instrument Serif', serif" }}>{card.title}</em>
                   </span>
                 </div>

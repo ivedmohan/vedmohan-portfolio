@@ -16,12 +16,12 @@ import CapabilitiesSection from "@/components/CapabilitiesSection";
 const StatsSection = lazy(() => import("@/components/StatsSection"));
 const TechStackSection = lazy(() => import("@/components/TechStackSection"));
 const FeaturedProjectSection = lazy(() => import("@/components/FeaturedProjectSection"));
+const ContentSection = lazy(() => import("@/components/ContentSection"));
 const PhilosophySection = lazy(() => import("@/components/PhilosophySection"));
 const ProjectsSection = lazy(() => import("@/components/ProjectsSection"));
 const HackathonWinsSection = lazy(() => import("@/components/HackathonWinsSection"));
 const ExperienceSection = lazy(() => import("@/components/ExperienceSection"));
 const TestimonialsSection = lazy(() => import("@/components/TestimonialsSection"));
-const ContentSection = lazy(() => import("@/components/ContentSection"));
 
 function animateOpacity(el: HTMLVideoElement, from: number, to: number, duration: number) {
   const start = performance.now();
@@ -147,7 +147,7 @@ const Index = () => {
 
         {/* Navbar */}
         <nav className="fixed top-0 left-0 right-0 z-50 flex justify-center pt-6 px-6">
-          <div className="liquid-glass rounded-full px-2 py-2 flex items-center justify-between gap-4 border border-white/5">
+          <div className="liquid-glass aave-glass aave-nav rounded-full px-2 py-2 flex items-center justify-between gap-4 border border-white/5">
             <div className="flex items-center pl-2">
               <span className="text-white font-medium text-sm mr-4 whitespace-nowrap">Ved Mohan</span>
             </div>
@@ -174,12 +174,12 @@ const Index = () => {
                 href="https://drive.google.com/file/d/16kZBAqm2iPIwfo2YI6_GPTXooJkLrpxX/view?usp=sharing"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group liquid-glass rounded-full px-5 py-2 text-white text-xs font-medium hover:bg-white/10 transition-colors border border-white/10 flex items-center gap-2"
+                className="group liquid-glass aave-glass rounded-full px-5 py-2 text-white text-xs font-medium hover:bg-white/10 transition-colors border border-white/10 flex items-center gap-2 hidden"
               >
                 <Download size={14} className="text-white/40 group-hover:text-white transition-colors" />
                 CV
               </a>
-              <a href="mailto:vedmohan0@gmail.com" className="liquid-glass rounded-full px-6 py-2 text-white text-xs font-medium hover:bg-white/10 transition-colors border border-white/10 bg-white/5">
+              <a href="mailto:vedmohan0@gmail.com" className="liquid-glass aave-glass rounded-full px-6 py-2 text-white text-xs font-medium hover:bg-white/10 transition-colors border border-white/10 bg-white/5">
                 Hire Me
               </a>
             </div>
@@ -195,10 +195,10 @@ const Index = () => {
             Founder • Builder • Freelancer • Product Developer • New Delhi
           </p>
           <div className="mt-12 flex flex-col sm:flex-row items-center gap-6">
-            <a href="mailto:vedmohan0@gmail.com" className="liquid-glass rounded-full px-10 py-5 text-white text-lg font-medium hover:bg-white/10 transition-all border border-white/10 inline-flex items-center gap-3 group">
+            <a href="mailto:vedmohan0@gmail.com" className="liquid-glass aave-glass rounded-full px-10 py-5 text-white text-lg font-medium hover:bg-white/10 transition-all border border-white/10 inline-flex items-center gap-3 group">
               Hire Me <ArrowRight size={20} className="transition-transform group-hover:translate-x-1" />
             </a>
-            <a href="https://drive.google.com/file/d/16kZBAqm2iPIwfo2YI6_GPTXooJkLrpxX/view?usp=sharing" target="_blank" rel="noopener noreferrer" className="text-white/40 hover:text-white text-sm uppercase tracking-[0.2em] font-medium transition-all border-b border-transparent hover:border-white/20 pb-1">
+            <a href="https://drive.google.com/file/d/16kZBAqm2iPIwfo2YI6_GPTXooJkLrpxX/view?usp=sharing" target="_blank" rel="noopener noreferrer" className="text-white/40 hover:text-white text-sm uppercase tracking-[0.2em] font-medium transition-all border-b border-transparent hover:border-white/20 pb-1 hidden">
               View CV / Resume
             </a>
           </div>
@@ -215,12 +215,12 @@ const Index = () => {
               { Icon: Github, href: "https://github.com/ivedmohan" },
               { Icon: Linkedin, href: "https://linkedin.com/in/ivedmohan" }
             ].map(({ Icon, href }, i) => (
-              <a key={i} href={href} target="_blank" rel="noopener noreferrer" className="liquid-glass rounded-full p-4 text-white/80 hover:text-white hover:bg-white/5 transition-all outline outline-1 outline-white/5">
+              <a key={i} href={href} target="_blank" rel="noopener noreferrer" className="liquid-glass aave-glass rounded-full p-4 text-white/80 hover:text-white hover:bg-white/5 transition-all outline outline-1 outline-white/5">
                 <Icon size={20} />
               </a>
             ))}
           </div>
-          <button onClick={toggleMute} className="liquid-glass rounded-full p-4 text-white/80 hover:text-white hover:bg-white/5 transition-all outline outline-1 outline-white/5 flex items-center gap-3 group">
+          <button onClick={toggleMute} className="liquid-glass aave-glass rounded-full p-4 text-white/80 hover:text-white hover:bg-white/5 transition-all outline outline-1 outline-white/5 flex items-center gap-3 group">
             <span className="text-[10px] uppercase tracking-widest font-medium opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-all transform translate-x-0 md:translate-x-2 md:group-hover:translate-x-0">
               {isMuted ? "Unmute Ambient" : "Mute Experience"}
             </span>
@@ -264,7 +264,7 @@ const Index = () => {
               Open for collaborations, freelance projects, or just a chat about Web3 and AI.
             </p>
             <div className="flex flex-wrap items-center justify-center gap-6">
-              <a href="mailto:vedmohan0@gmail.com" className="liquid-glass rounded-full px-8 py-4 text-white font-medium flex items-center gap-3 hover:bg-white/10 transition-all border border-white/5">
+              <a href="mailto:vedmohan0@gmail.com" className="liquid-glass aave-glass rounded-full px-8 py-4 text-white font-medium flex items-center gap-3 hover:bg-white/10 transition-all border border-white/5">
                 <Mail size={20} /> vedmohan0@gmail.com
               </a>
               <div className="flex items-center gap-4">

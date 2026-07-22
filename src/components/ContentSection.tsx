@@ -82,7 +82,7 @@ const ContentSection = () => {
             Building in public, one <em className="italic transition-all hover:text-white/80">project at a time</em>.
           </motion.h2>
           <motion.a 
-            href="https://x.com/zorothebuilder" 
+            href="https://x.com/zorothebuilder"
             target="_blank"
             rel="noopener noreferrer"
             className="text-white/40 hover:text-white text-xs uppercase tracking-widest pb-4 transition-all"

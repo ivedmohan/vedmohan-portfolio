@@ -30,7 +30,7 @@ const FeaturedProjectSection = () => {
 
         <div className="absolute inset-0 flex flex-col justify-end p-8 md:p-16 z-[2]">
           <div className="flex flex-col md:flex-row items-end justify-between gap-10 w-full">
-            <div className="liquid-glass rounded-3xl p-8 md:p-10 max-w-xl backdrop-blur-xl border border-white/10">
+            <div className="liquid-glass aave-glass rounded-3xl p-8 md:p-10 max-w-xl backdrop-blur-xl border border-white/10">
               <div className="flex items-center gap-3 mb-6">
                 <div className="w-2 h-2 rounded-full bg-white animate-pulse" />
                 <p className="text-white/40 text-[10px] tracking-[0.3em] uppercase font-medium">
@@ -50,7 +50,7 @@ const FeaturedProjectSection = () => {
                 href="https://www.smoothsend.xyz/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="liquid-glass rounded-full px-12 py-5 text-white text-lg font-medium border border-white/10 hover:bg-white/10 transition-all text-center block md:mb-6 group/btn overflow-hidden"
+                className="liquid-glass aave-glass rounded-full px-12 py-5 text-white text-lg font-medium border border-white/10 hover:bg-white/10 transition-all text-center block md:mb-6 group/btn overflow-hidden"
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 style={{ fontFamily: "'Instrument Serif', serif" }}

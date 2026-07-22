@@ -71,7 +71,7 @@ const GlassCursor: React.FC = () => {
   return (
     <div
       ref={cursorRef}
-      className={`fixed top-0 left-0 w-10 h-10 rounded-full z-[9999] pointer-events-none transition-opacity duration-300 liquid-glass border border-white/10 ${
+      className={`fixed top-0 left-0 w-10 h-10 rounded-full z-[9999] pointer-events-none transition-opacity duration-300 liquid-glass aave-glass border border-white/10 ${
         isVisible ? "opacity-100" : "opacity-0"
       }`}
       style={{

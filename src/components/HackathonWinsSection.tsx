@@ -8,42 +8,49 @@ const wins = [
     subtitle: "Avalanche India Pitch Day Finalist",
     description: "Top 5 out of 3500+ teams across India.",
     icon: Trophy,
+    link: "https://x.com/Team1IND/status/2001207474649481474?s=20",
   },
   {
     title: "$1,000 Bounty",
     subtitle: "StarkNet Hacker House Bangalore",
     description: "Built DefiZen AI Agent for StarkNet ecosystem.",
     icon: Award,
+    link: undefined,
   },
   {
     title: "$700 AVAX",
     subtitle: "Team 1 Delhi Hackathon",
     description: "Winner for innovative cross-chain tooling.",
     icon: Star,
+    link: "https://x.com/AvaxTeam1/status/1977583648967966986?s=20",
   },
   {
     title: "$400 Bounty",
     subtitle: "Neo X Grind Hackathon",
     description: "Best deployment and interaction on Neo X.",
     icon: Zap,
+    link: undefined,
   },
   {
     title: "$115 Akash Track Winner",
     subtitle: "HackOdisha 5.0",
     description: "Best deployment on Akash decentralized cloud.",
     icon: Trophy,
+    link: "https://x.com/ZoroTheBuilder/status/1976317193508770013?s=20",
   },
   {
     title: "$100 AVAX",
     subtitle: "AVAX Speedrun Winner",
     description: "Recognized for building and shipping on Avalanche during the AVAX Speedrun.",
     icon: Zap,
+    link: "https://x.com/Team1IND/status/2079522597272731873?s=20",
   },
   {
     title: "Aptos Alumni",
     subtitle: "Winter School Recognition",
     description: "Mainnet integrations and project recognition.",
     icon: Award,
+    link: undefined,
   },
 ];
 
@@ -100,6 +107,16 @@ const HackathonWinsSection = () => {
               <p className="text-white/40 text-sm leading-relaxed mt-auto">
                 {win.description}
               </p>
+              {win.link && (
+                <a
+                  href={win.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-white/50 hover:text-white text-[10px] uppercase tracking-widest mt-6 inline-flex items-center gap-2 transition-colors"
+                >
+                  View winning post <span aria-hidden="true">↗</span>
+                </a>
+              )}
             </motion.div>
           ))}
         </div>
