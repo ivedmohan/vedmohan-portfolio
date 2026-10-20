@@ -12,7 +12,13 @@ declare global {
   }
 }
 
-const posts = [
+type Post = {
+  title: string;
+  link: string;
+  type: "post" | "article";
+};
+
+const posts: Post[] = [
   {
     title: "Build Log 01",
     link: "https://x.com/ZoroTheBuilder/status/2067709003015356717?s=20",

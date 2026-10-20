@@ -9,6 +9,28 @@ import { pathToFileURL } from "node:url";
 const ROUTES = ["/", "/about"];
 const ROOT_PLACEHOLDER = '<div id="root"></div>';
 
+const escapeHtml = (value) =>
+  value.replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+
+// Swap the route's values into index.html's <head>; a tag that is missing fails the build
+function withMeta(html, meta) {
+  const swaps = [
+    ["<title>", "</title>", meta.title],
+    ['<meta name="description" content="', '"', meta.description],
+    ['<meta property="og:title" content="', '"', meta.socialTitle],
+    ['<meta property="og:description" content="', '"', meta.socialDescription],
+    ['<meta name="twitter:title" content="', '"', meta.socialTitle],
+    ['<meta name="twitter:description" content="', '"', meta.socialDescription],
+  ];
+  return swaps.reduce((out, [open, close, value]) => {
+    const start = out.indexOf(open);
+    if (start === -1) throw new Error(`index.html has no ${open}`);
+    const valueStart = start + open.length;
+    const valueEnd = out.indexOf(close, valueStart);
+    return out.slice(0, valueStart) + escapeHtml(value) + out.slice(valueEnd);
+  }, html);
+}
+
 const distDir = path.resolve("dist");
 const ssrDir = path.resolve("dist-ssr");
 
@@ -18,7 +40,7 @@ try {
     throw new Error(`dist/index.html has no ${ROOT_PLACEHOLDER} to fill`);
   }
 
-  const { render } = await import(pathToFileURL(path.join(ssrDir, "entry-server.js")).href);
+  const { render, routeMeta } = await import(pathToFileURL(path.join(ssrDir, "entry-server.js")).href);
 
   function streamToString(stream) {
     return new Promise((resolve, reject) => {
@@ -36,9 +58,11 @@ try {
   }
 
   for (const route of ROUTES) {
+    const meta = routeMeta[route];
+    if (!meta) throw new Error(`no routeMeta entry for ${route}`);
     const appHtml = await streamToString(await render(route));
     // data-prerendered tells src/main.tsx which route this markup belongs to
-    const page = template.replace(
+    const page = withMeta(template, meta).replace(
       ROOT_PLACEHOLDER,
       () => `<div id="root" data-prerendered="${route}">${appHtml}</div>`,
     );

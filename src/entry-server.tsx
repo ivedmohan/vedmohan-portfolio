@@ -2,6 +2,8 @@ import { renderToPipeableStream, type PipeableStream } from "react-dom/server";
 import { StaticRouter } from "react-router-dom/server";
 import App from "./App.tsx";
 
+export { routeMeta } from "./lib/routeMeta.ts";
+
 const RENDER_TIMEOUT_MS = 10_000;
 
 // Used only at build time by scripts/prerender.mjs. Resolves once every lazy
