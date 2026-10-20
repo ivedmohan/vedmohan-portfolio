@@ -15,7 +15,7 @@ Requirements:
 ```sh
 nvm use          # or install Node 24 another way
 npm ci           # install exactly what package-lock.json records
-npm run dev      # start the Vite dev server on http://localhost:8080
+npm run dev      # start the Vite dev server on http://localhost:3000
 ```
 
 Other scripts:
