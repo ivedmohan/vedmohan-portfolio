@@ -115,6 +115,13 @@ const Index = () => {
     animateOpacity(v, 0, 1, 500);
   }, [isHeroInView, isTabVisible]);
 
+  // With prerendered markup the video can fire "canplay" before hydration attaches onCanPlay
+  useEffect(() => {
+    const v = videoRef.current;
+    if (v && v.readyState >= HTMLMediaElement.HAVE_FUTURE_DATA) onCanPlay();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const onTimeUpdate = useCallback(() => {
     const v = videoRef.current;
     if (!v || !v.duration) return;
