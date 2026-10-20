@@ -44,12 +44,12 @@ const socials = [
 
 const serif = { fontFamily: "'Instrument Serif', serif" };
 
-const SectionHeading = ({ eyebrow, title }: { eyebrow: string; title: string }) => (
+const SectionHeading = ({ eyebrow, title, as: Heading = "h2" }: { eyebrow: string; title: string; as?: "h1" | "h2" }) => (
   <div className="mb-12">
     <p className="text-foreground/40 text-[10px] tracking-[0.3em] uppercase mb-4">{eyebrow}</p>
-    <h2 className="text-4xl md:text-6xl text-foreground tracking-tight italic" style={serif}>
+    <Heading className="text-4xl md:text-6xl text-foreground tracking-tight italic" style={serif}>
       {title}
-    </h2>
+    </Heading>
   </div>
 );
 
@@ -70,7 +70,7 @@ const About = () => (
       <div className="max-w-6xl mx-auto relative space-y-28 md:space-y-40">
         {/* WHO I AM */}
         <motion.section id="who-i-am" {...fadeUp}>
-          <SectionHeading eyebrow="About" title="Who I am" />
+          <SectionHeading as="h1" eyebrow="About" title="Who I am" />
           <p className="text-3xl md:text-5xl text-foreground leading-[1.15] tracking-tight max-w-4xl">
             Founder, builder, and product developer{" "}
             <em className="italic text-foreground/60" style={serif}>

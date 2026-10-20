@@ -1,5 +1,6 @@
 import { useRef, useCallback, useState, useEffect, lazy, Suspense } from "react";
 import { AnimatePresence, motion, useInView } from "framer-motion";
+import { useLocation } from "react-router-dom";
 import { Globe, ArrowRight, Instagram, Twitter, Mail, Github, Linkedin, Volume2, VolumeX } from "lucide-react";
 import LoadingScreen from "@/components/LoadingScreen";
 import GlassCursor from "@/components/GlassCursor";
@@ -36,6 +37,7 @@ function animateOpacity(el: HTMLVideoElement, from: number, to: number, duration
 
 const Index = () => {
   useSmoothScroll();
+  const { hash } = useLocation();
   const [loading, setLoading] = useState(true);
   const [isMuted, setIsMuted] = useState(true);
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -76,6 +78,20 @@ const Index = () => {
       videoRef.current.volume = 0.3;
     }
   }, [loading]);
+
+  // Arriving from another route with a hash (e.g. /#experience): wait for the lazy section, then scroll to it.
+  useEffect(() => {
+    if (loading || !hash) return;
+    let frame = 0;
+    let tries = 0;
+    const scrollToHash = () => {
+      const el = document.getElementById(hash.slice(1));
+      if (el) el.scrollIntoView();
+      else if (tries++ < 120) frame = requestAnimationFrame(scrollToHash);
+    };
+    scrollToHash();
+    return () => cancelAnimationFrame(frame);
+  }, [loading, hash]);
 
   const toggleMute = () => {
     if (videoRef.current) {

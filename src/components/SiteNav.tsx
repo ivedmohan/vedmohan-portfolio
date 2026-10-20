@@ -12,8 +12,7 @@ const linkClass = "text-white/60 hover:text-white hover:bg-white/5 px-4 py-2 rou
 
 const SiteNav = () => {
   const { pathname } = useLocation();
-  // Homepage sections are in-page anchors; from other routes they point back to "/".
-  const sectionPrefix = pathname === "/" ? "" : "/";
+  const onHome = pathname === "/";
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 flex justify-center pt-6 px-6">
@@ -26,11 +25,18 @@ const SiteNav = () => {
           <NavLink to="/about" className={linkClass} activeClassName="text-white bg-white/5">
             About
           </NavLink>
-          {sectionLinks.map((link) => (
-            <a key={link.name} href={`${sectionPrefix}${link.hash}`} className={linkClass}>
-              {link.name}
-            </a>
-          ))}
+          {/* Homepage sections are in-page anchors; from other routes they route back to "/" and Index scrolls to the hash. */}
+          {sectionLinks.map((link) =>
+            onHome ? (
+              <a key={link.name} href={link.hash} className={linkClass}>
+                {link.name}
+              </a>
+            ) : (
+              <Link key={link.name} to={{ pathname: "/", hash: link.hash }} className={linkClass}>
+                {link.name}
+              </Link>
+            ),
+          )}
         </div>
         <div className="w-px h-4 bg-white/10 hidden sm:block" />
         <div className="flex items-center gap-2">
