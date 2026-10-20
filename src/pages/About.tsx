@@ -160,7 +160,7 @@ const About = () => (
       <PrefersMotionVideo
         src={HERO_VIDEO}
         preload="metadata"
-        className="absolute inset-x-0 top-0 h-[900px] w-full object-cover opacity-25 pointer-events-none"
+        className="absolute inset-x-0 top-0 h-[900px] w-full object-cover grayscale opacity-25 pointer-events-none"
       />
       <div className="absolute inset-x-0 top-0 h-[900px] bg-gradient-to-b from-transparent via-black/40 to-background pointer-events-none" />
 
@@ -274,7 +274,7 @@ const About = () => (
             <PrefersMotionVideo
               src={REEL_VIDEO}
               preload="metadata"
-              className="absolute inset-0 h-full w-full object-cover"
+              className="absolute inset-0 h-full w-full object-cover grayscale"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-transparent" />
             <div className="relative p-8 md:p-12 max-w-2xl">
