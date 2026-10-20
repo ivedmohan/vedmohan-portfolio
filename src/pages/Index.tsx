@@ -1,5 +1,6 @@
 import { useRef, useCallback, useState, useEffect, lazy, Suspense } from "react";
 import { AnimatePresence, motion, useInView } from "framer-motion";
+import { useLocation } from "react-router-dom";
 import { Globe, ArrowRight, Instagram, Twitter, Mail, Github, Linkedin, Download, Volume2, VolumeX } from "lucide-react";
 import LoadingScreen from "@/components/LoadingScreen";
 import GlassCursor from "@/components/GlassCursor";
@@ -35,6 +36,7 @@ function animateOpacity(el: HTMLVideoElement, from: number, to: number, duration
 
 const Index = () => {
   useSmoothScroll();
+  const { pathname } = useLocation();
   const [loading, setLoading] = useState(true);
   const [isMuted, setIsMuted] = useState(true);
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -45,6 +47,13 @@ const Index = () => {
   
   // Track tab visibility
   const [isTabVisible, setIsTabVisible] = useState(true);
+
+  // /about serves this same page, opened at its About section
+  useEffect(() => {
+    if (pathname.replace(/\/+$/, "") === "/about") {
+      document.getElementById("about")?.scrollIntoView();
+    }
+  }, [pathname]);
 
   useEffect(() => {
     const handleVisibilityChange = () => {
@@ -98,6 +107,13 @@ const Index = () => {
     }
     animateOpacity(v, 0, 1, 500);
   }, [isHeroInView, isTabVisible]);
+
+  // With prerendered markup the video can fire "canplay" before hydration attaches onCanPlay
+  useEffect(() => {
+    const v = videoRef.current;
+    if (v && v.readyState >= HTMLMediaElement.HAVE_FUTURE_DATA) onCanPlay();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const onTimeUpdate = useCallback(() => {
     const v = videoRef.current;

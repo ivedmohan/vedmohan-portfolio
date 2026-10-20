@@ -4,6 +4,12 @@ const GlassCursor: React.FC = () => {
   const cursorRef = useRef<HTMLDivElement>(null);
   const [isHovering, setIsHovering] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
+  // Checked after mount so the prerendered markup matches the first client render
+  const [isCoarsePointer, setIsCoarsePointer] = useState(false);
+
+  useEffect(() => {
+    setIsCoarsePointer(window.matchMedia("(pointer: coarse)").matches);
+  }, []);
 
   useEffect(() => {
     const cursor = cursorRef.current;
@@ -64,7 +70,7 @@ const GlassCursor: React.FC = () => {
   }, [isHovering, isVisible]);
 
   // Hide on touch devices
-  if (typeof window !== "undefined" && window.matchMedia("(pointer: coarse)").matches) {
+  if (isCoarsePointer) {
     return null;
   }
 
