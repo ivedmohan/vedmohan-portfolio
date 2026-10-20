@@ -1,8 +1,10 @@
 import { useRef, useCallback, useState, useEffect, lazy, Suspense } from "react";
 import { AnimatePresence, motion, useInView } from "framer-motion";
-import { Globe, ArrowRight, Instagram, Twitter, Mail, Github, Linkedin, Download, Volume2, VolumeX } from "lucide-react";
+import { useLocation } from "react-router-dom";
+import { Globe, ArrowRight, Instagram, Twitter, Mail, Github, Linkedin, Volume2, VolumeX } from "lucide-react";
 import LoadingScreen from "@/components/LoadingScreen";
 import GlassCursor from "@/components/GlassCursor";
+import SiteNav from "@/components/SiteNav";
 import { useSmoothScroll } from "@/hooks/useSmoothScroll";
 
 // Constant for the main video
@@ -35,6 +37,7 @@ function animateOpacity(el: HTMLVideoElement, from: number, to: number, duration
 
 const Index = () => {
   useSmoothScroll();
+  const { hash } = useLocation();
   const [loading, setLoading] = useState(true);
   const [isMuted, setIsMuted] = useState(true);
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -75,6 +78,20 @@ const Index = () => {
       videoRef.current.volume = 0.3;
     }
   }, [loading]);
+
+  // Arriving from another route with a hash (e.g. /#experience): wait for the lazy section, then scroll to it.
+  useEffect(() => {
+    if (loading || !hash) return;
+    let frame = 0;
+    let tries = 0;
+    const scrollToHash = () => {
+      const el = document.getElementById(hash.slice(1));
+      if (el) el.scrollIntoView();
+      else if (tries++ < 120) frame = requestAnimationFrame(scrollToHash);
+    };
+    scrollToHash();
+    return () => cancelAnimationFrame(frame);
+  }, [loading, hash]);
 
   const toggleMute = () => {
     if (videoRef.current) {
@@ -145,46 +162,7 @@ const Index = () => {
           {loading && <LoadingScreen onComplete={() => setLoading(false)} />}
         </AnimatePresence>
 
-        {/* Navbar */}
-        <nav className="fixed top-0 left-0 right-0 z-50 flex justify-center pt-6 px-6">
-          <div className="liquid-glass aave-glass aave-nav rounded-full px-2 py-2 flex items-center justify-between gap-4 border border-white/5">
-            <div className="flex items-center pl-2">
-              <span className="text-white font-medium text-sm mr-4 whitespace-nowrap">Ved Mohan</span>
-            </div>
-            <div className="w-px h-4 bg-white/10 hidden sm:block" />
-            <div className="hidden md:flex items-center gap-1">
-              {[
-                { name: "About", href: "#about" },
-                { name: "Experience", href: "#experience" },
-                { name: "Projects", href: "#projects" },
-                { name: "Content", href: "#content" },
-              ].map((link) => (
-                <a
-                  key={link.name}
-                  href={link.href}
-                  className="text-white/60 hover:text-white hover:bg-white/5 px-4 py-2 rounded-full text-xs font-medium transition-all"
-                >
-                  {link.name}
-                </a>
-              ))}
-            </div>
-            <div className="w-px h-4 bg-white/10 hidden sm:block" />
-            <div className="flex items-center gap-2">
-              <a 
-                href="https://drive.google.com/file/d/16kZBAqm2iPIwfo2YI6_GPTXooJkLrpxX/view?usp=sharing"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group liquid-glass aave-glass rounded-full px-5 py-2 text-white text-xs font-medium hover:bg-white/10 transition-colors border border-white/10 flex items-center gap-2 hidden"
-              >
-                <Download size={14} className="text-white/40 group-hover:text-white transition-colors" />
-                CV
-              </a>
-              <a href="mailto:vedmohan0@gmail.com" className="liquid-glass aave-glass rounded-full px-6 py-2 text-white text-xs font-medium hover:bg-white/10 transition-colors border border-white/10 bg-white/5">
-                Hire Me
-              </a>
-            </div>
-          </div>
-        </nav>
+        <SiteNav />
 
         {/* Hero Content */}
         <div className="relative z-10 flex-1 flex flex-col items-center justify-center px-6 py-12 text-center">
