@@ -1,5 +1,5 @@
-import { useEffect, useRef } from "react";
-import { animate, motion, MotionConfig, useInView } from "framer-motion";
+import { useEffect, useRef, useState } from "react";
+import { animate, motion, MotionConfig, useInView, useReducedMotion } from "framer-motion";
 import { ArrowUpRight, Award, Github, Linkedin, Mail, Star, Trophy, Twitter, Zap } from "lucide-react";
 import SiteNav from "@/components/SiteNav";
 import { Badge } from "@/components/ui/badge";
@@ -140,26 +140,32 @@ const fadeUp = {
 const Counter = ({ value, prefix, suffix }: { value: number; prefix: string; suffix: string }) => {
   const ref = useRef<HTMLSpanElement>(null);
   const inView = useInView(ref, { once: true, margin: "-40px" });
+  const reduceMotion = useReducedMotion();
+  const [display, setDisplay] = useState(0);
 
   useEffect(() => {
     if (!inView) return;
-    const controls = animate(0, value, {
-      duration: 1.6,
-      ease: "easeOut",
-      onUpdate: (v) => {
-        if (ref.current) ref.current.textContent = `${prefix}${Math.round(v).toLocaleString("en-US")}${suffix}`;
-      },
-    });
+    if (reduceMotion) {
+      setDisplay(value);
+      return;
+    }
+    const controls = animate(0, value, { duration: 1.6, ease: "easeOut", onUpdate: (v) => setDisplay(Math.round(v)) });
     return () => controls.stop();
-  }, [inView, value, prefix, suffix]);
+  }, [inView, reduceMotion, value]);
 
   return (
     <span ref={ref}>
       {prefix}
-      {value.toLocaleString("en-US")}
+      {display.toLocaleString("en-US")}
       {suffix}
     </span>
   );
+};
+
+const PrefersMotionVideo = ({ className, ...props }: React.VideoHTMLAttributes<HTMLVideoElement>) => {
+  const reduceMotion = useReducedMotion();
+  if (reduceMotion) return null;
+  return <video muted autoPlay loop playsInline aria-hidden="true" className={className} {...props} />;
 };
 
 const orbs = [
@@ -174,14 +180,10 @@ const About = () => (
     <SiteNav />
 
     <main className="relative px-6 pt-40 md:pt-48 pb-24 overflow-hidden">
-      <video
+      <PrefersMotionVideo
         src={HERO_VIDEO}
-        muted
-        autoPlay
-        loop
-        playsInline
-        aria-hidden="true"
-        className="absolute inset-x-0 top-0 h-[900px] w-full object-cover opacity-25 pointer-events-none motion-reduce:hidden"
+        preload="metadata"
+        className="absolute inset-x-0 top-0 h-[900px] w-full object-cover opacity-25 pointer-events-none"
       />
       <div className="absolute inset-x-0 top-0 h-[900px] bg-gradient-to-b from-transparent via-black/40 to-background pointer-events-none" />
       {orbs.map((orb) => (
@@ -211,11 +213,6 @@ const About = () => (
                 .
               </p>
               <p className="text-foreground/60 text-lg leading-relaxed font-light mt-8 max-w-2xl">{intro}</p>
-              <p className="text-foreground/60 text-lg leading-relaxed font-light mt-4 max-w-2xl">
-                Most days I'm somewhere between a smart-contract editor and a design file: shipping gasless
-                transaction rails for developers, teaching AI agents to hold wallets, and winning the occasional
-                hackathon along the way.
-              </p>
               <div className="flex flex-wrap gap-2 mt-8">
                 {["Web3", "AI agents", "Product", "Frontend", "Open source"].map((chip, i) => (
                   <Badge
@@ -234,19 +231,16 @@ const About = () => (
             <div className="relative">
               <div className="absolute -inset-4 rounded-[2.5rem] bg-gradient-to-tr from-violet-500/30 via-cyan-400/20 to-amber-400/30 blur-2xl" aria-hidden="true" />
               <motion.div
-                className="relative rounded-[2rem] overflow-hidden border border-white/10 aspect-[4/3]"
+                className="relative rounded-[2rem] overflow-hidden border border-white/10 aspect-[1200/630]"
                 animate={{ y: [0, -10, 0] }}
                 transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}
               >
                 <img
                   src="/og-image.png"
-                  alt="Ved Mohan — founder, builder and product developer"
+                  alt="Ved Mohan, Founder, Builder, Product Developer"
                   className="absolute inset-0 h-full w-full object-cover"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-violet-500/10" />
-                <span className="absolute bottom-4 left-5 text-[10px] uppercase tracking-[0.3em] text-white/70">
-                  Ved Mohan · New Delhi
-                </span>
               </motion.div>
             </div>
           </div>
@@ -314,21 +308,17 @@ const About = () => (
         {/* REEL */}
         <motion.section id="reel" aria-label="Showreel" {...fadeUp}>
           <div className="relative rounded-[2.5rem] overflow-hidden border border-white/10 min-h-[320px] md:min-h-[460px] flex items-end">
-            <video
+            <PrefersMotionVideo
               src={REEL_VIDEO}
-              muted
-              autoPlay
-              loop
-              playsInline
               preload="metadata"
-              className="absolute inset-0 h-full w-full object-cover motion-reduce:hidden"
+              className="absolute inset-0 h-full w-full object-cover"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-transparent" />
             <div className="absolute inset-0 bg-gradient-to-br from-violet-600/30 via-transparent to-cyan-500/20 mix-blend-screen" />
             <div className="relative p-8 md:p-12 max-w-2xl">
-              <p className="text-[10px] tracking-[0.3em] uppercase text-cyan-300 mb-3">Philosophy</p>
+              <p className="text-[10px] tracking-[0.3em] uppercase text-cyan-300 mb-3">What I care about</p>
               <p className="text-3xl md:text-5xl italic text-white leading-tight" style={serif}>
-                Make the hard parts invisible, so people only feel the product.
+                Shipping useful products with clean, thoughtful experiences.
               </p>
             </div>
           </div>
@@ -402,12 +392,11 @@ const About = () => (
         <motion.section id="toolkit" {...fadeUp}>
           <SectionHeading eyebrow="Toolkit" title="What I build with" />
           <div className="flex flex-wrap gap-3">
-            {toolkit.map(({ label, accent }, i) => (
+            {toolkit.map(({ label, accent }) => (
               <motion.span
                 key={label}
                 className={`liquid-glass rounded-full px-5 py-2.5 text-sm border border-white/10 ${accent.text}`}
-                animate={{ y: [0, -4, 0] }}
-                transition={{ duration: 3 + (i % 4) * 0.5, repeat: Infinity, ease: "easeInOut", delay: i * 0.15 }}
+                whileHover={{ y: -4 }}
               >
                 {label}
               </motion.span>
