@@ -12,45 +12,48 @@ const ROOT_PLACEHOLDER = '<div id="root"></div>';
 const distDir = path.resolve("dist");
 const ssrDir = path.resolve("dist-ssr");
 
-const template = await fs.readFile(path.join(distDir, "index.html"), "utf8");
-if (!template.includes(ROOT_PLACEHOLDER)) {
-  throw new Error(`dist/index.html has no ${ROOT_PLACEHOLDER} to fill`);
-}
-
-const { render } = await import(pathToFileURL(path.join(ssrDir, "entry-server.js")).href);
-
-function streamToString(stream) {
-  return new Promise((resolve, reject) => {
-    let html = "";
-    const sink = new Writable({
-      write(chunk, _encoding, callback) {
-        html += chunk.toString();
-        callback();
-      },
-    });
-    sink.on("finish", () => resolve(html));
-    sink.on("error", reject);
-    stream.pipe(sink);
-  });
-}
-
-for (const route of ROUTES) {
-  const appHtml = await streamToString(await render(route));
-  // data-prerendered tells src/main.tsx which route this markup belongs to
-  const page = template.replace(
-    ROOT_PLACEHOLDER,
-    () => `<div id="root" data-prerendered="${route}">${appHtml}</div>`,
-  );
-  // Static hosts differ on whether /about resolves to about.html or about/index.html, so write both
-  const outFiles =
-    route === "/"
-      ? [path.join(distDir, "index.html")]
-      : [path.join(distDir, `${route}.html`), path.join(distDir, route, "index.html")];
-  for (const outFile of outFiles) {
-    await fs.mkdir(path.dirname(outFile), { recursive: true });
-    await fs.writeFile(outFile, page);
-    console.log(`prerendered ${route} -> ${path.relative(process.cwd(), outFile)}`);
+try {
+  const template = await fs.readFile(path.join(distDir, "index.html"), "utf8");
+  if (!template.includes(ROOT_PLACEHOLDER)) {
+    throw new Error(`dist/index.html has no ${ROOT_PLACEHOLDER} to fill`);
   }
-}
 
-await fs.rm(ssrDir, { recursive: true, force: true });
+  const { render } = await import(pathToFileURL(path.join(ssrDir, "entry-server.js")).href);
+
+  function streamToString(stream) {
+    return new Promise((resolve, reject) => {
+      let html = "";
+      const sink = new Writable({
+        write(chunk, _encoding, callback) {
+          html += chunk.toString();
+          callback();
+        },
+      });
+      sink.on("finish", () => resolve(html));
+      sink.on("error", reject);
+      stream.pipe(sink);
+    });
+  }
+
+  for (const route of ROUTES) {
+    const appHtml = await streamToString(await render(route));
+    // data-prerendered tells src/main.tsx which route this markup belongs to
+    const page = template.replace(
+      ROOT_PLACEHOLDER,
+      () => `<div id="root" data-prerendered="${route}">${appHtml}</div>`,
+    );
+    // Static hosts differ on whether /about resolves to about.html or about/index.html, so write both
+    const outFiles =
+      route === "/"
+        ? [path.join(distDir, "index.html")]
+        : [path.join(distDir, `${route}.html`), path.join(distDir, route, "index.html")];
+    for (const outFile of outFiles) {
+      await fs.mkdir(path.dirname(outFile), { recursive: true });
+      await fs.writeFile(outFile, page);
+      console.log(`prerendered ${route} -> ${path.relative(process.cwd(), outFile)}`);
+    }
+  }
+} finally {
+  // Never leave the SSR bundle behind; eslint only ignores dist/
+  await fs.rm(ssrDir, { recursive: true, force: true });
+}
