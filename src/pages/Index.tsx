@@ -23,7 +23,6 @@ const PhilosophySection = lazy(() => import("@/components/PhilosophySection"));
 const ProjectsSection = lazy(() => import("@/components/ProjectsSection"));
 const HackathonWinsSection = lazy(() => import("@/components/HackathonWinsSection"));
 const ExperienceSection = lazy(() => import("@/components/ExperienceSection"));
-const TestimonialsSection = lazy(() => import("@/components/TestimonialsSection"));
 
 function animateOpacity(el: HTMLVideoElement, from: number, to: number, duration: number) {
   const start = performance.now();
@@ -220,7 +219,6 @@ const Index = () => {
         <PhilosophySection />
         <ProjectsSection />
         <HackathonWinsSection />
-        {/* <TestimonialsSection /> */}
       </Suspense>
 
       {/* CONNECT SECTION */}
